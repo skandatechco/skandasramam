@@ -13,6 +13,13 @@ import Devotees from "./pages/Devotees";
 import Bookings from "./pages/Bookings";
 import Donations from "./pages/Donations";
 import Admin from "./pages/Admin";
+import Poojas from "./pages/Poojas";
+import Events from "./pages/Events";
+import About from "./pages/About";
+import Gallery from "./pages/Gallery";
+import Resources from "./pages/Resources";
+import Charity from "./pages/Charity";
+import Contact from "./pages/Contact";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -33,6 +40,13 @@ const App = () => (
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/donations" element={<Donations />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/poojas" element={<Poojas />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/charity" element={<Charity />} />
+            <Route path="/contact" element={<Contact />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

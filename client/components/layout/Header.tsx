@@ -4,11 +4,14 @@ import { ThemeToggle } from "./ThemeToggle";
 import { Sparkles } from "lucide-react";
 
 const nav = [
-  { to: "/calendar", label: "Spiritual Calendar" },
-  { to: "/devotees", label: "Devotees" },
-  { to: "/bookings", label: "Bookings" },
-  { to: "/donations", label: "Donations" },
-  { to: "/admin", label: "Admin" },
+  { to: "/", label: "Home" },
+  { to: "/poojas", label: "Poojas" },
+  { to: "/events", label: "Events" },
+  { to: "/about", label: "About" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/resources", label: "Resources" },
+  { to: "/charity", label: "Charity" },
+  { to: "/contact", label: "Contact" },
 ];
 
 export function Header() {
@@ -17,8 +20,8 @@ export function Header() {
       <a href="#content" className="sr-only focus:not-sr-only focus:absolute left-4 top-4 z-[60] rounded-md bg-background px-3 py-2 text-sm font-medium border shadow">Skip to content</a>
       <div className="container flex h-16 items-center justify-between">
         <NavLink to="/" className="flex items-center gap-2" aria-label="Ashram Fullstack home">
-          <div className="h-8 w-8 rounded-md bg-gradient-to-br from-primary to-accent grid place-items-center text-primary-foreground">
-            <Sparkles className="h-5 w-5" aria-hidden="true" />
+          <div className="h-8 w-8 rounded-full grid place-items-center overflow-hidden border">
+            <img src="https://cdn.builder.io/api/v1/image/assets%2F982c525ed71b4aecb07284a69278ef3d%2Ffaf8ca55fc2c469baf03a19ca1b05c19?format=webp&width=800" alt="Ashram logo" className="h-8 w-8 object-cover" />
           </div>
           <span className="font-extrabold tracking-tight text-lg">Ashram Fullstack</span>
         </NavLink>
