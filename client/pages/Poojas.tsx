@@ -2,7 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 
 const subnav = [
   { to: "/poojas", label: "Overview", end: true },
-  { to: "/poojas/daily", label: "Daily Poojas" },
+  { to: "/poojas/regular", label: "Regular Poojas" },
 ];
 
 export default function Poojas() {
