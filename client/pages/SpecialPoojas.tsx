@@ -126,16 +126,21 @@ export default function SpecialPoojas() {
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {specials.map((s) => (
             <div key={s.title} className="rounded-xl border bg-card p-6 flex flex-col gap-3">
-              <h3 className="text-lg font-semibold">{s.title}</h3>
+              <NavLink to={`/poojas/special/${slugify(s.title)}`} className="text-lg font-semibold hover:underline">
+                {s.title}
+              </NavLink>
               <p className="text-sm text-muted-foreground">{s.desc}</p>
-              <div className="mt-2">
+              <div className="mt-2 flex gap-2">
+                <Button asChild variant="outline">
+                  <NavLink to={`/poojas/special/${slugify(s.title)}`}>View Details</NavLink>
+                </Button>
                 {s.action === "donate" ? (
                   <Button asChild variant="secondary">
-                    <NavLink to="/donations">Donate</NavLink>
+                    <NavLink to={`/poojas/special/${slugify(s.title)}#form`}>Donate</NavLink>
                   </Button>
                 ) : (
                   <Button asChild>
-                    <NavLink to="/bookings">Book Pooja</NavLink>
+                    <NavLink to={`/poojas/special/${slugify(s.title)}#form`}>Book Pooja</NavLink>
                   </Button>
                 )}
               </div>
