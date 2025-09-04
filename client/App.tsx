@@ -16,6 +16,7 @@ import Admin from "./pages/Admin";
 import Poojas from "./pages/Poojas";
 import PoojasOverview from "./pages/PoojasOverview";
 import PoojasDaily from "./pages/PoojasDaily";
+import SpecialPoojas from "./pages/SpecialPoojas";
 import Events from "./pages/Events";
 import About from "./pages/About";
 import Gallery from "./pages/Gallery";
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/poojas" element={<Poojas />}>
               <Route index element={<PoojasOverview />} />
               <Route path="regular" element={<PoojasDaily />} />
+              <Route path="special" element={<SpecialPoojas />} />
               <Route path="daily" element={<Navigate to="/poojas/regular" replace />} />
             </Route>
             <Route path="/events" element={<Events />} />
