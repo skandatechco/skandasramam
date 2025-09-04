@@ -1,11 +1,16 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { Sparkles } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 const nav = [
   { to: "/", label: "Home" },
-  { to: "/poojas", label: "Poojas" },
   { to: "/events", label: "Events" },
   { to: "/about", label: "About" },
   { to: "/gallery", label: "Gallery" },
