@@ -132,11 +132,11 @@ export default function SpecialPoojas() {
               <div className="mt-2">
                 {s.action === "donate" ? (
                   <Button asChild variant="secondary">
-                    <NavLink to={`/poojas/special/${slugify(s.title)}#form`}>Donate</NavLink>
+                    <NavLink to={`/poojas/special/${slugify(s.title)}`}>Donate</NavLink>
                   </Button>
                 ) : (
                   <Button asChild>
-                    <NavLink to={`/poojas/special/${slugify(s.title)}#form`}>Book Pooja</NavLink>
+                    <NavLink to={`/poojas/special/${slugify(s.title)}`}>Book Pooja</NavLink>
                   </Button>
                 )}
               </div>
