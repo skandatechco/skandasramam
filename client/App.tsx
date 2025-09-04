@@ -49,7 +49,10 @@ const App = () => (
               <Route path="regular" element={<PoojasDaily />} />
               <Route path="special" element={<SpecialPoojas />} />
               <Route path="special/:slug" element={<SpecialPoojaDetail />} />
-              <Route path="daily" element={<Navigate to="/poojas/regular" replace />} />
+              <Route
+                path="daily"
+                element={<Navigate to="/poojas/regular" replace />}
+              />
             </Route>
             <Route path="/events" element={<Events />} />
             <Route path="/about" element={<About />} />

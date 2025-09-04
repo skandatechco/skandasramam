@@ -11,7 +11,12 @@ function slugify(s: string) {
     .replace(/(^-|-$)+/g, "");
 }
 
-type Detail = { title: string; benefits: string[]; image?: string; donate?: boolean };
+type Detail = {
+  title: string;
+  benefits: string[];
+  image?: string;
+  donate?: boolean;
+};
 
 const DETAILS: Detail[] = [
   {
@@ -171,13 +176,17 @@ export default function SpecialPoojaDetail() {
   const detail = getDetailBySlug(slug);
 
   // Ensure top of page on navigation
-  try { window.scrollTo({ top: 0, behavior: "auto" }); } catch {}
+  try {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  } catch {}
 
   if (!detail) {
     return (
       <section className="container py-16 text-center">
         <h1 className="text-2xl font-bold">Pooja not found</h1>
-        <p className="mt-2 text-muted-foreground">The requested special pooja does not exist.</p>
+        <p className="mt-2 text-muted-foreground">
+          The requested special pooja does not exist.
+        </p>
         <div className="mt-6">
           <Button asChild>
             <NavLink to="/poojas/special">Back to Special Poojas</NavLink>
@@ -190,11 +199,14 @@ export default function SpecialPoojaDetail() {
   return (
     <main className="container py-10 md:py-14">
       <nav className="text-sm text-muted-foreground">
-        <NavLink to="/poojas">Poojas</NavLink> / <NavLink to="/poojas/special">Special</NavLink> /
+        <NavLink to="/poojas">Poojas</NavLink> /{" "}
+        <NavLink to="/poojas/special">Special</NavLink> /
         <span className="text-foreground"> {detail.title}</span>
       </nav>
 
-      <h1 className="mt-4 text-3xl font-extrabold tracking-tight">{detail.title}</h1>
+      <h1 className="mt-4 text-3xl font-extrabold tracking-tight">
+        {detail.title}
+      </h1>
 
       <div className="mt-8 grid gap-6 md:grid-cols-3 items-start">
         {/* Image (approx 30%) */}
@@ -221,7 +233,9 @@ export default function SpecialPoojaDetail() {
         {/* Intake form */}
         <div className="md:col-span-1" id="form">
           <div className="rounded-xl border p-6">
-            <h2 className="text-lg font-semibold">{detail.donate ? "Donation" : "Booking"} Request</h2>
+            <h2 className="text-lg font-semibold">
+              {detail.donate ? "Donation" : "Booking"} Request
+            </h2>
             <form
               className="mt-4 grid gap-3"
               onSubmit={(e) => {
@@ -265,7 +279,12 @@ export default function SpecialPoojaDetail() {
               </div>
               <div>
                 <Label htmlFor="intent">Intent / Sankalpam</Label>
-                <Textarea id="intent" name="intent" rows={4} placeholder="Describe your intent or sankalpam" />
+                <Textarea
+                  id="intent"
+                  name="intent"
+                  rows={4}
+                  placeholder="Describe your intent or sankalpam"
+                />
               </div>
               <Button type="submit" className="mt-2">
                 {detail.donate ? "Proceed to Donate" : "Book Pooja"}

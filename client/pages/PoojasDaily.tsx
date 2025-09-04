@@ -99,7 +99,9 @@ export default function PoojasDaily() {
   return (
     <section className="container py-10 md:py-14">
       <div className="mx-auto max-w-3xl text-center">
-        <h1 className="text-3xl font-extrabold tracking-tight">Regular Poojas</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight">
+          Regular Poojas
+        </h1>
         <p className="mt-3 text-muted-foreground">{intro}</p>
       </div>
 

@@ -2,17 +2,18 @@ import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
 
 function slugify(s: string) {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
 }
 
 type Special = { title: string; desc: string; action?: "book" | "donate" };
 
 const specials: Special[] = [
   {
-    title:
-      "Lord Kamala Siddhi Vinayaka, Panchamukha Heramba Ganapathy",
-    desc:
-      "Removes obstacles and grants success in all endeavors.",
+    title: "Lord Kamala Siddhi Vinayaka, Panchamukha Heramba Ganapathy",
+    desc: "Removes obstacles and grants success in all endeavors.",
   },
   {
     title: "Goddess Prathyangira Devi",
@@ -42,7 +43,10 @@ const specials: Special[] = [
     title: "Lord Panchamukha Hanuman",
     desc: "Grants courage, protection, and victory over negativity.",
   },
-  { title: "Lord Iyyapan", desc: "Blesses with discipline, devotion, and family peace." },
+  {
+    title: "Lord Iyyapan",
+    desc: "Blesses with discipline, devotion, and family peace.",
+  },
   {
     title: "Asta Dasa Bhuja Durga Parameswari",
     desc: "Destroys obstacles and ensures strength and prosperity.",
@@ -87,7 +91,9 @@ export default function SpecialPoojas() {
     <main>
       <section className="border-b bg-secondary/40">
         <div className="container py-8">
-          <h1 className="text-3xl font-extrabold tracking-tight">Special Poojas</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">
+            Special Poojas
+          </h1>
           <p className="mt-2 text-muted-foreground max-w-3xl">
             Festival and sankalpa-based poojas performed on auspicious days with
             elaborate rituals and Vedic procedures.
@@ -115,28 +121,38 @@ export default function SpecialPoojas() {
             offering of just one grain of rice. Similarly, a single flower
             offered in the Homam is equal to covering the cosmic form of the
             deity with the fragrance and beauty of that flower. Thus, a Homam
-            conducted according to strict Vedic practices becomes a multiplier of
-            divine power. The Devathai so satisfied with the sincerity and
-            conduct of the Devotees has no alternative but to meet every wish and
-            command.
+            conducted according to strict Vedic practices becomes a multiplier
+            of divine power. The Devathai so satisfied with the sincerity and
+            conduct of the Devotees has no alternative but to meet every wish
+            and command.
           </p>
         </article>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {specials.map((s) => (
-            <div key={s.title} className="rounded-xl border bg-card p-6 flex flex-col gap-3">
-              <NavLink to={`/poojas/special/${slugify(s.title)}`} className="text-lg font-semibold hover:underline">
+            <div
+              key={s.title}
+              className="rounded-xl border bg-card p-6 flex flex-col gap-3"
+            >
+              <NavLink
+                to={`/poojas/special/${slugify(s.title)}`}
+                className="text-lg font-semibold hover:underline"
+              >
                 {s.title}
               </NavLink>
               <p className="text-sm text-muted-foreground">{s.desc}</p>
               <div className="mt-2">
                 {s.action === "donate" ? (
                   <Button asChild variant="secondary">
-                    <NavLink to={`/poojas/special/${slugify(s.title)}`}>Donate</NavLink>
+                    <NavLink to={`/poojas/special/${slugify(s.title)}`}>
+                      Donate
+                    </NavLink>
                   </Button>
                 ) : (
                   <Button asChild>
-                    <NavLink to={`/poojas/special/${slugify(s.title)}`}>Book Pooja</NavLink>
+                    <NavLink to={`/poojas/special/${slugify(s.title)}`}>
+                      Book Pooja
+                    </NavLink>
                   </Button>
                 )}
               </div>
