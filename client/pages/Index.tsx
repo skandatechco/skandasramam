@@ -43,7 +43,7 @@ export default function Index() {
           className="absolute inset-0 -z-20 h-full w-full object-cover"
         />
         <div className="absolute inset-0 -z-10 bg-black/40" />
-        <div className="container min-h-[60vh] md:min-h-[70vh] flex items-center py-10">
+        <div className="container min-h-[70vh] md:min-h-[80vh] flex items-end py-10 pb-8 md:pb-12">
           <div className="grid w-full gap-6 md:grid-cols-2">
             {/* CTA 1 - Pariharam */}
             <div
