@@ -9,7 +9,7 @@ export default function PoojasOverview() {
       description="Explore our sacred services. For the current schedule of daily poojas, view the Daily Poojas section."
       action={
         <Button asChild>
-          <NavLink to="/poojas/daily">View Daily Poojas</NavLink>
+          <NavLink to="/poojas/regular">View Regular Poojas</NavLink>
         </Button>
       }
     />
