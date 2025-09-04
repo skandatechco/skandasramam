@@ -49,6 +49,8 @@ export function Header() {
           </span>
         </NavLink>
         <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
+          {/* Poojas dropdown */}
+          <PoojasDropdown />
           {nav.map((n) => (
             <NavLink
               key={n.to}
@@ -74,5 +76,29 @@ export function Header() {
         </div>
       </div>
     </header>
+  );
+}
+
+function PoojasDropdown() {
+  const location = useLocation();
+  const active = location.pathname.startsWith("/poojas");
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={`px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary transition-colors ${active ? "text-primary" : "text-foreground/80"}`}
+        >
+          Poojas
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuItem asChild>
+          <NavLink to="/poojas/regular">Regular Pooja</NavLink>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <NavLink to="/poojas/special">Special Poojas</NavLink>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
