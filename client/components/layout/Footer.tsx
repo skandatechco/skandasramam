@@ -3,7 +3,7 @@ export function Footer() {
     <footer className="border-t mt-16">
       <div className="container py-10 grid gap-8 md:grid-cols-3">
         <div>
-          <h3 className="font-bold">Ashram Fullstack</h3>
+          <h3 className="font-bold">Chennai Om Sri Skandashramam</h3>
           <p className="text-sm text-muted-foreground mt-2">
             Preserving tradition, empowering devotion through technology.
           </p>
@@ -28,7 +28,7 @@ export function Footer() {
       </div>
       <div className="border-t">
         <div className="container py-6 text-xs text-muted-foreground flex flex-col md:flex-row gap-3 items-center justify-between">
-          <p>© {new Date().getFullYear()} Ashram Fullstack. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Chennai Om Sri Skandashramam. All rights reserved.</p>
           <div className="flex gap-4">
             <a href="#" className="hover:text-foreground">Terms</a>
             <a href="#" className="hover:text-foreground">Privacy</a>
