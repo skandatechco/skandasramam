@@ -1,6 +1,83 @@
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
 
+type Special = { title: string; desc: string; action?: "book" | "donate" };
+
+const specials: Special[] = [
+  {
+    title:
+      "Lord Kamala Siddhi Vinayaka, Panchamukha Heramba Ganapathy",
+    desc:
+      "Removes obstacles and grants success in all endeavors.",
+  },
+  {
+    title: "Goddess Prathyangira Devi",
+    desc: "Protects against black magic, evil eye, and negative energies.",
+  },
+  {
+    title: "Lord Veera Sarabeswara",
+    desc: "Pacifies doshas, cures ailments, and removes enmity.",
+  },
+  {
+    title: "Goddess Matha Bhuvaneshwari",
+    desc: "Bestows abundance, harmony, and spiritual elevation.",
+  },
+  {
+    title: "Lord Skanda (Murugan)",
+    desc: "Brings victory, clears debts, and ensures progeny blessings.",
+  },
+  {
+    title: "Lord Shiva",
+    desc: "Cleanses karmas and grants health, peace, and liberation.",
+  },
+  {
+    title: "Lord Saniswarar",
+    desc: "Reduces Saturn’s malefic effects and brings steady progress.",
+  },
+  {
+    title: "Lord Panchamukha Hanuman",
+    desc: "Grants courage, protection, and victory over negativity.",
+  },
+  { title: "Lord Iyyapan", desc: "Blesses with discipline, devotion, and family peace." },
+  {
+    title: "Asta Dasa Bhuja Durga Parameswari",
+    desc: "Destroys obstacles and ensures strength and prosperity.",
+  },
+  {
+    title: "Lord Dattatreya",
+    desc: "Removes stress, balances karma, and grants wisdom.",
+  },
+  {
+    title: "Sadguru Shantananda Swamigal",
+    desc: "Bestows guru’s grace for clarity and spiritual growth.",
+  },
+  {
+    title: "Prathyangira Sarabha Soolini Koti Homam",
+    desc: "Powerful remedy for karmic afflictions and universal protection.",
+  },
+  {
+    title: "Durga Saptha Sathi Parayanam",
+    desc: "Grants courage, wealth, and protection from negativity.",
+  },
+  {
+    title: "Nava Varna Pooja",
+    desc: "Invokes divine energies for health, prosperity, and liberation.",
+  },
+  {
+    title: "Guru Paaduka Pooja",
+    desc: "Receives guru’s blessings for wisdom and guidance.",
+  },
+  {
+    title: "Homam for World Peace",
+    desc: "Promotes harmony, compassion, and collective well-being.",
+  },
+  {
+    title: "Daily Annadhanam",
+    desc: "Removes hunger-related sins and ensures abundance and blessings.",
+    action: "donate",
+  },
+];
+
 export default function SpecialPoojas() {
   return (
     <main>
