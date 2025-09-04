@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 
 function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
