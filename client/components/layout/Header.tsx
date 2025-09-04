@@ -19,11 +19,11 @@ export function Header() {
     <header role="banner" className="sticky top-0 z-50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
       <a href="#content" className="sr-only focus:not-sr-only focus:absolute left-4 top-4 z-[60] rounded-md bg-background px-3 py-2 text-sm font-medium border shadow">Skip to content</a>
       <div className="container flex h-16 items-center justify-between">
-        <NavLink to="/" className="flex items-center gap-2" aria-label="Ashram Fullstack home">
+        <NavLink to="/" className="flex items-center gap-2" aria-label="Chennai Om Sri Skandashramam home">
           <div className="h-8 w-8 rounded-full grid place-items-center overflow-hidden border">
             <img src="https://cdn.builder.io/api/v1/image/assets%2F982c525ed71b4aecb07284a69278ef3d%2Ffaf8ca55fc2c469baf03a19ca1b05c19?format=webp&width=800" alt="Ashram logo" className="h-8 w-8 object-cover" />
           </div>
-          <span className="font-extrabold tracking-tight text-lg">Ashram Fullstack</span>
+          <span className="font-extrabold tracking-tight text-lg whitespace-nowrap hidden sm:block">Chennai Om Sri Skandashramam</span>
         </NavLink>
         <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
           {nav.map((n) => (
