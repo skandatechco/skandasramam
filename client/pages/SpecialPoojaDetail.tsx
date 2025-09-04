@@ -213,11 +213,6 @@ export default function SpecialPoojaDetail() {
               <li key={i}>{b}</li>
             ))}
           </ul>
-          <div className="mt-6">
-            <Button asChild>
-              <NavLink to="#form">{detail.donate ? "Donate" : "Book Pooja"}</NavLink>
-            </Button>
-          </div>
         </div>
 
         {/* Intake form */}
