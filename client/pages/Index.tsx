@@ -19,27 +19,32 @@ export default function Index() {
     <main>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 opacity-30 bg-[radial-gradient(600px_circle_at_20%_0%,hsl(var(--accent)/.35),transparent_60%),radial-gradient(600px_circle_at_80%_20%,hsl(var(--primary)/.35),transparent_60%)]" />
-        <div className="container py-20 md:py-28">
-          <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs font-medium text-muted-foreground">
-              <ShieldCheck className="h-4 w-4 text-primary" /> V3.1 • Draft PRD
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets%2F982c525ed71b4aecb07284a69278ef3d%2Fc74d0651ea67426c9ba104ad091acd9a?format=webp&width=800"
+          alt="Chennai Om Sri Skandashramam temple banner"
+          className="absolute inset-0 -z-20 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 -z-10 bg-black/40" />
+        <div className="container py-16 md:py-28">
+          <div className="mx-auto max-w-3xl text-center text-white">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-medium text-white/90">
+              <ShieldCheck className="h-4 w-4 text-white" /> V3.1 • Draft PRD
             </span>
-            <h1 className="mt-5 text-4xl md:text-6xl font-extrabold tracking-tight">
+            <h1 className="mt-5 text-4xl md:text-6xl font-extrabold tracking-tight text-white">
               Preserving tradition, empowering devotion through technology
             </h1>
-            <p className="mt-5 text-muted-foreground text-lg">
+            <p className="mt-5 text-white/90 text-lg">
               A comprehensive spiritual ecosystem blending devotee lifecycle management, Vedic intelligence, and family heritage preservation.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button asChild className="">
+              <Button asChild>
                 <NavLink to="/bookings">Start Your Spiritual Journey</NavLink>
               </Button>
-              <Button asChild variant="outline">
+              <Button asChild variant="outline" className="border-white/40 text-white hover:bg-white/10">
                 <NavLink to="/calendar">View Spiritual Calendar</NavLink>
               </Button>
             </div>
-            <div className="mt-6 text-xs text-muted-foreground">
+            <div className="mt-6 text-xs text-white/80">
               MVP Pilot: Launch with one ashram • Offline pathways: SMS & IVR for elders
             </div>
           </div>
