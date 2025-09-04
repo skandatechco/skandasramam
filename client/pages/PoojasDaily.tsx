@@ -37,21 +37,62 @@ const items: Item[] = [
       "Special abhishekam to Goddess Prathiyankara Devi and Lord Pancha Mukha Anjaneyar followed by alankaram and deeparadanai.",
     time: "10:00 AM",
   },
-  { title: "Krithigai", details: "Special abhishekam to Lord Swaminatha Swami.", time: "10:00 AM" },
-  { title: "Tamil Month First Saturday", details: "Special abhishekam to Lord Saniswara Bhagawan.", time: "10:00 AM" },
-  { title: "Annadanam", details: "Daily prasadam service for all devotees.", time: "12:00 Noon", action: "donate" },
+  {
+    title: "Krithigai",
+    details: "Special abhishekam to Lord Swaminatha Swami.",
+    time: "10:00 AM",
+  },
+  {
+    title: "Tamil Month First Saturday",
+    details: "Special abhishekam to Lord Saniswara Bhagawan.",
+    time: "10:00 AM",
+  },
+  {
+    title: "Annadanam",
+    details: "Daily prasadam service for all devotees.",
+    time: "12:00 Noon",
+    action: "donate",
+  },
   {
     title: "Pournami / Full moon",
     details:
       "Special abhishekam to Goddess Matha Bhuvaneswari and Lord Dattatreya.",
     time: "10:00 AM",
   },
-  { title: "Uthiram Nakshatram", details: "Special abhishekam to Lord Ayyapan followed by alankaram and deeparadanai.", time: "10:30 AM" },
-  { title: "Chitirai Nakshatram", details: "Special abhishekam and alankaram to Lord Mahasudarshana Murthy followed by deeparadanai.", time: "10:30 AM" },
-  { title: "Swathi Nakshatram", details: "Special abhishekam and alankaram to Lord Lakshmi Narasimhar followed by deeparadanai.", time: "10:30 AM" },
-  { title: "Vishakam (Vishagam) Nakshatram", details: "Birth star of Sathguru Shrimath Santhananda Swamigal; special abhishekam and alankaram to Sathguru at the Ashram.", time: "10:30 AM" },
-  { title: "Prathiyankara Sarabha Sulini Homam", details: "Daily homam for protection and blessings.", time: "9:15 AM – 11:00 AM" },
-  { title: "Navavarna Pooja", details: "Performed on Panchami, Ashtami, Chaturdasi, New Moon, and Full Moon." },
+  {
+    title: "Uthiram Nakshatram",
+    details:
+      "Special abhishekam to Lord Ayyapan followed by alankaram and deeparadanai.",
+    time: "10:30 AM",
+  },
+  {
+    title: "Chitirai Nakshatram",
+    details:
+      "Special abhishekam and alankaram to Lord Mahasudarshana Murthy followed by deeparadanai.",
+    time: "10:30 AM",
+  },
+  {
+    title: "Swathi Nakshatram",
+    details:
+      "Special abhishekam and alankaram to Lord Lakshmi Narasimhar followed by deeparadanai.",
+    time: "10:30 AM",
+  },
+  {
+    title: "Vishakam (Vishagam) Nakshatram",
+    details:
+      "Birth star of Sathguru Shrimath Santhananda Swamigal; special abhishekam and alankaram to Sathguru at the Ashram.",
+    time: "10:30 AM",
+  },
+  {
+    title: "Prathiyankara Sarabha Sulini Homam",
+    details: "Daily homam for protection and blessings.",
+    time: "9:15 AM – 11:00 AM",
+  },
+  {
+    title: "Navavarna Pooja",
+    details:
+      "Performed on Panchami, Ashtami, Chaturdasi, New Moon, and Full Moon.",
+  },
 ];
 
 export default function PoojasDaily() {
@@ -64,13 +105,18 @@ export default function PoojasDaily() {
 
       <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {items.map((it) => (
-          <div key={it.title} className="rounded-xl border bg-card p-5 flex flex-col">
+          <div
+            key={it.title}
+            className="rounded-xl border bg-card p-5 flex flex-col"
+          >
             <div className="flex items-start gap-3">
               <BadgeCheck className="h-5 w-5 text-primary mt-0.5" />
               <div className="flex-1">
                 <h3 className="font-semibold">{it.title}</h3>
                 {it.details ? (
-                  <p className="mt-1 text-sm text-muted-foreground">{it.details}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {it.details}
+                  </p>
                 ) : null}
                 {it.time ? (
                   <p className="mt-2 text-sm text-muted-foreground flex items-center gap-1">
@@ -121,7 +167,9 @@ export default function PoojasDaily() {
 
       {/* Homam Schemes */}
       <div className="mt-10">
-        <h2 className="text-xl font-bold">Prathiyankara Sarabha Sulini Homam – Schemes</h2>
+        <h2 className="text-xl font-bold">
+          Prathiyankara Sarabha Sulini Homam – Schemes
+        </h2>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <div className="rounded-xl border bg-card p-5">
             <h3 className="font-semibold">Lifetime Deposit</h3>

@@ -28,11 +28,20 @@ export function Footer() {
       </div>
       <div className="border-t">
         <div className="container py-6 text-xs text-muted-foreground flex flex-col md:flex-row gap-3 items-center justify-between">
-          <p>© {new Date().getFullYear()} Chennai Om Sri Skandashramam. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Chennai Om Sri Skandashramam. All
+            rights reserved.
+          </p>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-foreground">Terms</a>
-            <a href="#" className="hover:text-foreground">Privacy</a>
-            <a href="#" className="hover:text-foreground">Contact</a>
+            <a href="#" className="hover:text-foreground">
+              Terms
+            </a>
+            <a href="#" className="hover:text-foreground">
+              Privacy
+            </a>
+            <a href="#" className="hover:text-foreground">
+              Contact
+            </a>
           </div>
         </div>
       </div>
