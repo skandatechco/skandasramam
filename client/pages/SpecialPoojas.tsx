@@ -92,11 +92,6 @@ export default function SpecialPoojas() {
             Festival and sankalpa-based poojas performed on auspicious days with
             elaborate rituals and Vedic procedures.
           </p>
-          <div className="mt-4">
-            <Button asChild>
-              <NavLink to="/bookings">Book Special Pooja</NavLink>
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -134,10 +129,7 @@ export default function SpecialPoojas() {
                 {s.title}
               </NavLink>
               <p className="text-sm text-muted-foreground">{s.desc}</p>
-              <div className="mt-2 flex gap-2">
-                <Button asChild variant="outline">
-                  <NavLink to={`/poojas/special/${slugify(s.title)}`}>View Details</NavLink>
-                </Button>
+              <div className="mt-2">
                 {s.action === "donate" ? (
                   <Button asChild variant="secondary">
                     <NavLink to={`/poojas/special/${slugify(s.title)}#form`}>Donate</NavLink>
