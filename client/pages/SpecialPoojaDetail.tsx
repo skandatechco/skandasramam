@@ -170,6 +170,9 @@ export default function SpecialPoojaDetail() {
   const { slug } = useParams();
   const detail = getDetailBySlug(slug);
 
+  // Ensure top of page on navigation
+  try { window.scrollTo({ top: 0, behavior: "auto" }); } catch {}
+
   if (!detail) {
     return (
       <section className="container py-16 text-center">
