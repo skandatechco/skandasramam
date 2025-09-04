@@ -45,6 +45,7 @@ const App = () => (
             <Route path="/poojas" element={<Poojas />}>
               <Route index element={<PoojasOverview />} />
               <Route path="daily" element={<PoojasDaily />} />
+              <Route path="regular" element={<PoojasDaily />} />
             </Route>
             <Route path="/events" element={<Events />} />
             <Route path="/about" element={<About />} />
