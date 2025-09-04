@@ -1,24 +1,50 @@
 import { BadgeCheck, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { NavLink } from "react-router-dom";
+
+type Item = {
+  title: string;
+  details?: string;
+  time?: string;
+  action?: "book" | "donate";
+};
 
 const intro =
   "Regular Puja’s such as Raghu Kalam, Amavasya, Pournami, Chaturthi, Pradosam, Ashtami, Karthigai, Chithirai, Vishagam & Swathi Nakshatram are conducted on a daily and monthly basis. Annadhanam is provided every day and all devotees are requested to participate.";
 
-const items: { title: string; note?: string }[] = [
+const items: Item[] = [
   {
     title: "Sankata Hara Chaturthi",
-    note:
-      "Special abhishekam to Lord Pancha Mukha Heramba Maha Ganapathy and Kamala Siddhi Vinayakar at 10:30 AM.",
+    details:
+      "Special abhishekam to Lord Pancha Mukha Heramba Maha Ganapathy and Kamala Siddhi Vinayakar.",
+    time: "10:30 AM",
   },
-  { title: "Krishna Paksha Astami" },
-  { title: "Maha Pradosham" },
-  { title: "Amavasya" },
-  { title: "Krithigai" },
-  { title: "Tamil Month First Saturday" },
-  { title: "Annadanam" , note: "Daily at 12:00 Noon"},
+  {
+    title: "Krishna Paksha Ashtami",
+    details:
+      "Special abhishekam to Goddess Asta Dasa Bhuja Durga Parameswari followed by alankaram and deeparadanai. Navavarna puja to Sri Chakra Poorna Maha Meru in the evening.",
+    time: "Abhishekam 10:30 AM • Navavarna 6:00 PM",
+  },
+  {
+    title: "Maha Pradosham",
+    details:
+      "Grand celebration for Sri Mahasahasralingamurthy and Lord Nandikeswarar with Mahanyasam and special abhishekam; deeparadanai and prasad distribution.",
+    time: "Mahanyasam 5:00 PM • Abhishekam 5:30 PM • Deeparadanai 6:30 PM",
+  },
+  {
+    title: "Amavasya (New Moon)",
+    details:
+      "Special abhishekam to Goddess Prathiyankara Devi and Lord Pancha Mukha Anjaneyar followed by alankaram and deeparadanai.",
+    time: "10:00 AM",
+  },
+  { title: "Krithigai", details: "Special abhishekam to Lord Swaminatha Swami.", time: "10:00 AM" },
+  { title: "Tamil Month First Saturday", details: "Special abhishekam to Lord Saniswara Bhagawan.", time: "10:00 AM" },
+  { title: "Annadanam", details: "Daily prasadam service for all devotees.", time: "12:00 Noon", action: "donate" },
   {
     title: "Pournami / Full moon",
-    note:
-      "Special abhishekam to Goddess Matha Bhuvaneswari and Lord Dattatreya at 10:00 AM.",
+    details:
+      "Special abhishekam to Goddess Matha Bhuvaneswari and Lord Dattatreya.",
+    time: "10:00 AM",
   },
   { title: "Uthiram Nakshatram" },
   { title: "Chitirai Nakshatram" },
@@ -41,17 +67,56 @@ export default function PoojasDaily() {
           <div key={it.title} className="rounded-xl border bg-card p-5">
             <div className="flex items-start gap-3">
               <BadgeCheck className="h-5 w-5 text-primary mt-0.5" />
-              <div>
+              <div className="flex-1">
                 <h3 className="font-semibold">{it.title}</h3>
-                {it.note ? (
-                  <p className="mt-1 text-sm text-muted-foreground flex items-center gap-1">
-                    <Clock className="h-4 w-4" /> {it.note}
+                {it.details ? (
+                  <p className="mt-1 text-sm text-muted-foreground">{it.details}</p>
+                ) : null}
+                {it.time ? (
+                  <p className="mt-2 text-sm text-muted-foreground flex items-center gap-1">
+                    <Clock className="h-4 w-4" /> {it.time}
                   </p>
                 ) : null}
+                <div className="mt-4">
+                  {it.action === "donate" ? (
+                    <Button asChild variant="secondary">
+                      <NavLink to="/donations">Donate</NavLink>
+                    </Button>
+                  ) : (
+                    <Button asChild>
+                      <NavLink to="/bookings">Book Pooja</NavLink>
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Annadanam Schemes */}
+      <div className="mt-12">
+        <h2 className="text-xl font-bold">Annadanam Schemes</h2>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <div className="rounded-xl border bg-card p-5">
+            <h3 className="font-semibold">Lifetime Deposit</h3>
+            <p className="mt-1 text-muted-foreground">INR 20,001</p>
+            <div className="mt-3">
+              <Button asChild variant="secondary">
+                <NavLink to="/donations">Donate</NavLink>
+              </Button>
+            </div>
+          </div>
+          <div className="rounded-xl border bg-card p-5">
+            <h3 className="font-semibold">One Day Sponsor</h3>
+            <p className="mt-1 text-muted-foreground">INR 1,001</p>
+            <div className="mt-3">
+              <Button asChild variant="secondary">
+                <NavLink to="/donations">Donate</NavLink>
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
