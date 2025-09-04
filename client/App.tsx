@@ -14,6 +14,8 @@ import Bookings from "./pages/Bookings";
 import Donations from "./pages/Donations";
 import Admin from "./pages/Admin";
 import Poojas from "./pages/Poojas";
+import PoojasOverview from "./pages/PoojasOverview";
+import PoojasDaily from "./pages/PoojasDaily";
 import Events from "./pages/Events";
 import About from "./pages/About";
 import Gallery from "./pages/Gallery";
@@ -40,7 +42,10 @@ const App = () => (
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/donations" element={<Donations />} />
             <Route path="/admin" element={<Admin />} />
-            <Route path="/poojas" element={<Poojas />} />
+            <Route path="/poojas" element={<Poojas />} >
+              <Route index element={<PoojasOverview />} />
+              <Route path="daily" element={<PoojasDaily />} />
+            </Route>
             <Route path="/events" element={<Events />} />
             <Route path="/about" element={<About />} />
             <Route path="/gallery" element={<Gallery />} />
