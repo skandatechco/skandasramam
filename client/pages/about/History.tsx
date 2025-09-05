@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
-import { Landmark, Flame, Sparkles, BookText, Shrine } from "lucide-react";
+import { Landmark, Flame, Sparkles, BookText, Star } from "lucide-react";
 
 const HERO_IMG = ""; // Optional: background image URL for hero (full-width)
 const SWAMI_PORTRAIT = ""; // Optional: portrait URL for Sri Santhananda Swamigal
 
 const HIGHLIGHTS: { icon: JSX.Element; text: string }[] = [
-  { icon: <Shrine className="h-5 w-5" />, text: "First temple in India devoted to Ugraprathyangira Devi and a modern shrine for Sarabheswara." },
+  { icon: <Star className="h-5 w-5" />, text: "First temple in India devoted to Ugraprathyangira Devi and a modern shrine for Sarabheswara." },
   { icon: <Landmark className="h-5 w-5" />, text: "Grand shrines for Bhuvaneswari, Ganapathy, Durga Parameswari, Siddhars, and Mahasahasralingamurthy (1008 lingams)." },
   { icon: <Flame className="h-5 w-5" />, text: "Installation of Purna Maha Meru and regular yagnas, aligned with Swamigal’s teachings." },
   { icon: <BookText className="h-5 w-5" />, text: "Serves as a spiritual hub for Vedic learning, worship, and large-scale community rituals." },
