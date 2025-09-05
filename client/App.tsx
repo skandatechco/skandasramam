@@ -18,6 +18,7 @@ import PoojasOverview from "./pages/PoojasOverview";
 import PoojasDaily from "./pages/PoojasDaily";
 import SpecialPoojas from "./pages/SpecialPoojas";
 import SpecialPoojaDetail from "./pages/SpecialPoojaDetail";
+import RegularPoojaDetail from "./pages/RegularPoojaDetail";
 import Events from "./pages/Events";
 import About from "./pages/About";
 import Gallery from "./pages/Gallery";
