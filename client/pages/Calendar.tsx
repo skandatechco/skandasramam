@@ -14,6 +14,10 @@ function normalize(s: string) {
   return (s || "").toLowerCase().normalize("NFKD").replace(/[^a-z]/g, "");
 }
 
+function slugify(s: string) {
+  return (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+}
+
 function deriveEvents(en: any) {
   const events: { title: string; details: string; time?: string }[] = [];
   const tithi = normalize(en?.tithi?.name || "");
