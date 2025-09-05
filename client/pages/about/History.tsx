@@ -1,87 +1,125 @@
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
+import { Landmark, Flame, Sparkles, BookText, Shrine } from "lucide-react";
 
-const VISION_IMAGE = ""; // Optional: set an archival image URL to show the left column image
-const TIMELINE: { year: string; text: string }[] = [
-  { year: "1990", text: "Ashram consecration" },
-  { year: "1995", text: "First Maha Kumbhabhishekam" },
-  { year: "2005", text: "Establishment of Prathyangira Devi sanctum" },
-  { year: "Today", text: "A center for spiritual growth and global devotees" },
+const HERO_IMG = ""; // Optional: background image URL for hero (full-width)
+const SWAMI_PORTRAIT = ""; // Optional: portrait URL for Sri Santhananda Swamigal
+
+const HIGHLIGHTS: { icon: JSX.Element; text: string }[] = [
+  { icon: <Shrine className="h-5 w-5" />, text: "First temple in India devoted to Ugraprathyangira Devi and a modern shrine for Sarabheswara." },
+  { icon: <Landmark className="h-5 w-5" />, text: "Grand shrines for Bhuvaneswari, Ganapathy, Durga Parameswari, Siddhars, and Mahasahasralingamurthy (1008 lingams)." },
+  { icon: <Flame className="h-5 w-5" />, text: "Installation of Purna Maha Meru and regular yagnas, aligned with Swamigal’s teachings." },
+  { icon: <BookText className="h-5 w-5" />, text: "Serves as a spiritual hub for Vedic learning, worship, and large-scale community rituals." },
+  { icon: <Sparkles className="h-5 w-5" />, text: "A living expression of Swamigal’s mission — ancient mantras and rituals for collective welfare." },
 ];
+
+const TIMELINE: { year: string; text: string }[] = [
+  { year: "1990s", text: "Vision and planning of Skandasramam by Sri Santhananda Swamigal." },
+  { year: "1999", text: "Consecration of the Chennai Om Skandasramam." },
+  { year: "2000s", text: "Establishment of shrines for Devi and Siddhars." },
+  { year: "Today", text: "Continues as a center of Vedic learning and public worship." },
+];
+
+const QUICK_FACTS: { aspect: string; details: string }[] = [
+  { aspect: "Founder", details: "Sri Santhananda Swamigal" },
+  { aspect: "Chennai Temple", details: "Om Skandasramam, Selaiyur" },
+  { aspect: "Consecration", details: "24 June 1999" },
+  { aspect: "Main Deities", details: "Ugraprathyangira Devi, Sarabheswara, Bhuvaneswari, Ganapathy, Siddhars" },
+  { aspect: "Legacy", details: "Pioneer of public Vedic yagnas, Shakti temples, spiritual democratization" },
+];
+
 const GALLERY_IMAGES: string[] = [];
 
 export default function AboutHistory() {
   return (
     <main>
-      {/* Hero Section (no image) */}
-      <section className="bg-gradient-to-b from-muted/60 to-background border-b">
-        <div className="container py-12 md:py-16 text-center">
+      {/* Hero Section with optional background image */}
+      <section
+        className="relative border-b"
+        style={HERO_IMG ? { backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.45)), url(${HERO_IMG})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
+      >
+        <div className={`container py-16 text-center ${HERO_IMG ? "text-white" : ""}`}>
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">The Sacred History of Skandasramam</h1>
-          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
-            A journey of devotion, tradition, and spiritual service.
+          <p className={`mt-3 max-w-2xl mx-auto ${HERO_IMG ? "text-white/90" : "text-muted-foreground"}`}>
+            A journey of vision, devotion, and divine grace.
           </p>
         </div>
       </section>
 
-      {/* Founding Story */}
+      {/* Introduction / Founding */}
       <section className="container py-10 md:py-14">
         <div className="grid md:grid-cols-3 gap-6 items-start">
-          {VISION_IMAGE && (
+          {SWAMI_PORTRAIT && (
             <div className="md:col-span-1">
               <div className="rounded-xl overflow-hidden border bg-muted aspect-[4/5]">
-                <img src={VISION_IMAGE} alt="Founding archival" className="w-full h-full object-cover" />
+                <img src={SWAMI_PORTRAIT} alt="Sri Santhananda Swamigal" className="w-full h-full object-cover" />
               </div>
             </div>
           )}
-          <div className={VISION_IMAGE ? "md:col-span-2" : "md:col-span-3"}>
+          <div className={SWAMI_PORTRAIT ? "md:col-span-2" : "md:col-span-3"}>
             <h2 className="text-2xl font-bold">The Vision</h2>
             <div className="mt-3 space-y-4 text-muted-foreground max-w-prose">
               <p>
-                Adi Shankarar, Thiruvalluvar the servitors of Siva, Vishnu and thousands of spiritual masters were born in this country and served the people.  They still live with us in the hymns sung and teachings taught by them. The service they rendered to humanity with their words and deeds is indeed immeasurable.
+                The Chennai Om Skandasramam
               </p>
               <p>
-                In this glorious lineage of sages has come Srimath Satguru Santhananda Swamigal. Our Swamigal is of Avadhuta tradition of Dattatreya.
-              </p>
-              <p>
-                Bharat is a very ancient country vitalized by spirituality from the time that is immemorial.  Innumerable sages and saints have fostered its spiritual culture and civilization.
-              </p>
-              <p>Thus sings the great Tamil Poet Subramanya Bharati.</p>
-              <p>The country that is called Bharat is ours</p>
-              <p>It is great in knowledge and spiritual joy.</p>
-              <p>In keeping its honor and dignity in giving alms.</p>
-              <p>In music.</p>
-              <p>In nectar-like poetry.</p>
-              <p>Indeed, this country imparts spiritual knowledge to the entire world.</p>
-              <p>Upanishads are the unique scriptural books, that are our own.</p>
-              <p>Is there any other in this world that is equivalent to our Upanishads?</p>
-              <p>
-                This is how Bharathi praises the philosophical works bequeathed to us by the sages of ancient times. This country alone has found out the true meaning of human life and the ethical way by which the entire humanity must live.
+                Consecrated on 24 June 1999 by Sri Santhananda Swamigal, the Chennai Om Skandasramam at Selaiyur is a unique temple complex dedicated to rare but powerful forms of divinity: Goddess Ugraprathyangira Devi and Lord Sarabheswara.
               </p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Temple Highlights */}
+      <section className="container py-6">
+        <h2 className="text-2xl font-bold">Temple Highlights</h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {HIGHLIGHTS.map((h, i) => (
+            <div key={i} className="rounded-xl border p-4 bg-card">
+              <div className="flex items-start gap-3">
+                <div className="shrink-0 rounded-md bg-primary/10 p-2 text-primary">{h.icon}</div>
+                <p className="text-sm text-muted-foreground">{h.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Timeline */}
       <section className="container py-8">
         <h2 className="text-2xl font-bold">Milestones</h2>
-        <ol className="mt-4 relative border-l pl-6">
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
           {TIMELINE.map((t, i) => (
-            <li key={i} className="mb-6">
-              <div className="absolute -left-[7px] top-1.5 h-3 w-3 rounded-full bg-primary" />
+            <div key={i} className="rounded-xl border p-4 bg-card">
               <div className="text-sm text-muted-foreground">{t.year}</div>
-              <div className="font-medium">{t.text}</div>
-            </li>
+              <div className="font-medium mt-1">{t.text}</div>
+            </div>
           ))}
-        </ol>
+        </div>
+      </section>
+
+      {/* Quick Facts */}
+      <section className="container py-8">
+        <h2 className="text-2xl font-bold">Quick Facts</h2>
+        <div className="mt-4 rounded-xl border bg-card overflow-hidden">
+          <table className="w-full text-sm">
+            <tbody>
+              {QUICK_FACTS.map((q, i) => (
+                <tr key={i} className="border-b last:border-b-0">
+                  <td className="p-3 font-medium w-40 align-top">{q.aspect}</td>
+                  <td className="p-3 text-muted-foreground">{q.details}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       {/* Spiritual Significance */}
-      <section className="py-12 bg-muted/30 border-y">
+      <section className="py-12 bg-muted/40 border-y">
         <div className="container text-center max-w-3xl">
-          <h2 className="text-2xl font-bold">Spiritual Significance</h2>
-          <blockquote className="mt-4 italic text-muted-foreground">
-            “This sacred ground stands as a beacon of divine grace, guiding devotees on their spiritual journey.”
+          <blockquote className="text-lg italic text-muted-foreground">
+            “The Chennai Om Skandasramam stands as a beacon of divine energy, uniting ancient traditions with modern devotion for the welfare of society.”
           </blockquote>
         </div>
       </section>
@@ -89,8 +127,8 @@ export default function AboutHistory() {
       {/* Gallery */}
       {GALLERY_IMAGES.length > 0 && (
         <section className="container py-10">
-          <h2 className="text-2xl font-bold">Gallery</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <h2 className="text-2xl font-bold">Image Gallery</h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {GALLERY_IMAGES.map((src, i) => (
               <div key={i} className="rounded-xl overflow-hidden border bg-muted aspect-video">
                 <img src={src} alt="Historical event" className="w-full h-full object-cover" />
