@@ -48,10 +48,13 @@ export default function Index() {
             {/* CTA 1 - Pariharam */}
             <div className="flex flex-col items-center gap-1">
               <div
-                className="rounded-full border p-1.5 backdrop-blur bg-white/40 shadow-md w-max"
+                className="rounded-2xl border px-3 py-2 backdrop-blur bg-white/40 shadow-md w-max text-center"
                 style={{ borderColor: "#C04A3A" }}
               >
-                <div className="flex items-center">
+                <div className="text-[11px] md:text-xs text-foreground/90 leading-none">
+                  Remedial pooja to remove obstacles and doshas.
+                </div>
+                <div className="mt-1 flex items-center justify-center">
                   <a
                     href="/bookings"
                     className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white"
@@ -61,16 +64,18 @@ export default function Index() {
                   </a>
                 </div>
               </div>
-              <p className="text-white/95 drop-shadow-sm text-center text-xs md:text-sm">Remedial pooja to remove obstacles and doshas.</p>
             </div>
 
             {/* CTA 2 - Regular */}
             <div className="flex flex-col items-center gap-1">
               <div
-                className="rounded-full border p-1.5 backdrop-blur bg-white/40 shadow-md w-max"
+                className="rounded-2xl border px-3 py-2 backdrop-blur bg-white/40 shadow-md w-max text-center"
                 style={{ borderColor: "#2F6C8A" }}
               >
-                <div className="flex items-center">
+                <div className="text-[11px] md:text-xs text-foreground/90 leading-none">
+                  Schedule recurring poojas on your auspicious dates.
+                </div>
+                <div className="mt-1 flex items-center justify-center">
                   <a
                     href="/poojas/regular"
                     className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white"
@@ -80,7 +85,6 @@ export default function Index() {
                   </a>
                 </div>
               </div>
-              <p className="text-white/95 drop-shadow-sm text-center text-xs md:text-sm">Schedule recurring poojas on your auspicious dates.</p>
             </div>
           </div>
         </div>
