@@ -8,7 +8,10 @@ import { getPanchang, findNextNakshatra } from "./integrations/prokerala";
 const monthCache = new Map<
   string,
   {
-    eventsByDate: Record<string, { title: string; details: string; time?: string }[]>;
+    eventsByDate: Record<
+      string,
+      { title: string; details: string; time?: string }[]
+    >;
     progress: number; // processed days count
     days: number;
     expiresAt: number;
@@ -16,7 +19,10 @@ const monthCache = new Map<
 >();
 
 function norm(s: string) {
-  return (s || "").toLowerCase().normalize("NFKD").replace(/[^a-z]/g, "");
+  return (s || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z]/g, "");
 }
 
 function deriveRegularEventsFromPanchang(en: any) {
@@ -61,7 +67,11 @@ function deriveRegularEventsFromPanchang(en: any) {
     );
   }
   if (/krittika|krithika|krithigai/.test(star)) {
-    add("Krithigai", "Special abhishekam to Lord Swaminatha Swami.", "10:00 AM");
+    add(
+      "Krithigai",
+      "Special abhishekam to Lord Swaminatha Swami.",
+      "10:00 AM",
+    );
   }
   if (/uttaraphalguni|uttaraphalgun|uthiram/.test(star)) {
     add(
@@ -92,7 +102,9 @@ function deriveRegularEventsFromPanchang(en: any) {
     );
   }
   // Exclude Navavarna and Annadanam from highlighting
-  return events.filter((e) => !/navavarna/i.test(e.title) && !/annadanam/i.test(e.title));
+  return events.filter(
+    (e) => !/navavarna/i.test(e.title) && !/annadanam/i.test(e.title),
+  );
 }
 
 export function createServer() {
@@ -224,10 +236,15 @@ export function createServer() {
             );
             entry.eventsByDate[date] = events.length
               ? events
-              : [{
-                  title: (p.nakshatra as any)?.name || (p.tithi as any)?.name || "Event",
-                  details: "Special abhishekam and deeparadanai.",
-                }];
+              : [
+                  {
+                    title:
+                      (p.nakshatra as any)?.name ||
+                      (p.tithi as any)?.name ||
+                      "Event",
+                    details: "Special abhishekam and deeparadanai.",
+                  },
+                ];
           }
         } catch (_) {
           // ignore individual day failures
@@ -237,9 +254,19 @@ export function createServer() {
       }
 
       const complete = entry.progress >= entry.days;
-      res.json({ ok: true, complete, progress: entry.progress, eventsByDate: entry.eventsByDate });
+      res.json({
+        ok: true,
+        complete,
+        progress: entry.progress,
+        eventsByDate: entry.eventsByDate,
+      });
     } catch (e: any) {
-      res.status(500).json({ ok: false, error: e?.message || "Failed to build month events" });
+      res
+        .status(500)
+        .json({
+          ok: false,
+          error: e?.message || "Failed to build month events",
+        });
     }
   });
 

@@ -2,7 +2,8 @@ import { PlaceholderPage } from "@/components/common/PlaceholderPage";
 
 import { useMemo } from "react";
 
-const ADDRESS = "Om Sri Skandasramam, 1, Kambar St, Rajaji Nagar, Ambedkar Nagar, Selaiyur, Chennai, Tamil Nadu 600073";
+const ADDRESS =
+  "Om Sri Skandasramam, 1, Kambar St, Rajaji Nagar, Ambedkar Nagar, Selaiyur, Chennai, Tamil Nadu 600073";
 const MAPS_LINK = "https://maps.app.goo.gl/kcTPDdMhTnXTodA6A";
 const WEBSITE = "https://www.skandasramam.com";
 const PHONE = ""; // set when available
@@ -61,7 +62,10 @@ export default function Contact() {
             {PHONE && (
               <div>
                 <div className="font-medium">Phone</div>
-                <a href={`tel:${PHONE}`} className="text-primary hover:underline">
+                <a
+                  href={`tel:${PHONE}`}
+                  className="text-primary hover:underline"
+                >
                   {PHONE}
                 </a>
               </div>

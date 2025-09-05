@@ -7,15 +7,24 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
 function useChennaiDefaults() {
-  return useMemo(() => ({ lat: 13.0827, lon: 80.2707, tz: "Asia/Kolkata" }), []);
+  return useMemo(
+    () => ({ lat: 13.0827, lon: 80.2707, tz: "Asia/Kolkata" }),
+    [],
+  );
 }
 
 function normalize(s: string) {
-  return (s || "").toLowerCase().normalize("NFKD").replace(/[^a-z]/g, "");
+  return (s || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z]/g, "");
 }
 
 function slugify(s: string) {
-  return (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+  return (s || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
 }
 
 function deriveEvents(en: any) {
@@ -63,7 +72,11 @@ function deriveEvents(en: any) {
   }
 
   if (/krittika|krithika|krithigai/.test(star)) {
-    add("Krithigai", "Special abhishekam to Lord Swaminatha Swami.", "10:00 AM");
+    add(
+      "Krithigai",
+      "Special abhishekam to Lord Swaminatha Swami.",
+      "10:00 AM",
+    );
   }
   if (/uttaraphalguni|uttaraphalgun|uthiram/.test(star)) {
     add(
@@ -117,7 +130,9 @@ export default function Calendar() {
   const [dataTa, setDataTa] = useState<any | null>(null);
   const [dataEn, setDataEn] = useState<any | null>(null);
   const [eventDates, setEventDates] = useState<string[]>([]);
-  const [eventsByDate, setEventsByDate] = useState<Record<string, { title: string; details: string; time?: string }[]>>({});
+  const [eventsByDate, setEventsByDate] = useState<
+    Record<string, { title: string; details: string; time?: string }[]>
+  >({});
   const [monthComplete, setMonthComplete] = useState(false);
 
   const dateStr = format(selected, "yyyy-MM-dd");
@@ -129,15 +144,22 @@ export default function Calendar() {
       setError(null);
       try {
         const [rTa, rEn] = await Promise.all([
-          fetch(`/api/panchangam?date=${dateStr}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&la=ta`),
-          fetch(`/api/panchangam?date=${dateStr}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&la=en`),
+          fetch(
+            `/api/panchangam?date=${dateStr}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&la=ta`,
+          ),
+          fetch(
+            `/api/panchangam?date=${dateStr}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&la=en`,
+          ),
         ]);
         const parse = async (r: Response) => {
           const raw = await r.text();
           let j: any = null;
-          try { j = JSON.parse(raw); } catch {}
+          try {
+            j = JSON.parse(raw);
+          } catch {}
           if (!r.ok || !j?.ok) {
-            const msg = (j && (j.error || j.message)) || raw || `Status ${r.status}`;
+            const msg =
+              (j && (j.error || j.message)) || raw || `Status ${r.status}`;
             throw new Error(msg);
           }
           return j.data;
@@ -161,10 +183,14 @@ export default function Calendar() {
     let cancelled = false;
     async function tick() {
       try {
-        const r = await fetch(`/api/calendar/month?year=${year}&month=${month}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`);
+        const r = await fetch(
+          `/api/calendar/month?year=${year}&month=${month}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`,
+        );
         const raw = await r.text();
         let j: any = null;
-        try { j = JSON.parse(raw); } catch {}
+        try {
+          j = JSON.parse(raw);
+        } catch {}
         if (!r.ok || !j?.ok) return;
         const keys = Object.keys(j.eventsByDate || {});
         if (!cancelled) {
@@ -177,9 +203,14 @@ export default function Calendar() {
     tick();
     if (!monthComplete) {
       const id = setInterval(tick, 15000); // poll every 15s to respect API rate limit
-      return () => { cancelled = true; clearInterval(id); };
+      return () => {
+        cancelled = true;
+        clearInterval(id);
+      };
     }
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [viewMonth, lat, lon, tz, monthComplete]);
 
   const tamilNak = dataTa?.nakshatra?.name || "—";
@@ -193,7 +224,9 @@ export default function Calendar() {
     <section className="container py-8 md:py-12">
       <div className="mb-6 flex items-center gap-2">
         <CalendarIcon className="h-5 w-5 text-primary" />
-        <h1 className="text-2xl md:text-3xl font-bold">Tamil Panchangam Calendar</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">
+          Tamil Panchangam Calendar
+        </h1>
       </div>
       <div className="grid md:grid-cols-2 gap-8">
         <div className="rounded-xl border bg-card p-4">
@@ -206,10 +239,14 @@ export default function Calendar() {
             ISOWeek
             className="rdp-tailwind"
             modifiers={{ event: eventDays }}
-            modifiersClassNames={{ event: "bg-amber-200 text-amber-900 font-semibold rounded-full" }}
+            modifiersClassNames={{
+              event: "bg-amber-200 text-amber-900 font-semibold rounded-full",
+            }}
           />
           {!monthComplete && (
-            <p className="mt-2 text-xs text-muted-foreground">Filling events for this month…</p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Filling events for this month…
+            </p>
           )}
         </div>
         <div className="rounded-xl border bg-card p-6 grid gap-4 content-start">
@@ -235,19 +272,27 @@ export default function Calendar() {
           )}
 
           <div className="mt-4">
-            <h2 className="text-base font-semibold">Events for {format(selected, "PPP")}</h2>
+            <h2 className="text-base font-semibold">
+              Events for {format(selected, "PPP")}
+            </h2>
             {loading ? (
               <p className="mt-2 text-sm text-muted-foreground">Loading…</p>
             ) : events.length === 0 ? (
-              <p className="mt-2 text-sm text-muted-foreground">No special events today.</p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                No special events today.
+              </p>
             ) : (
               <div className="mt-3 grid gap-3">
                 {events.map((e, i) => (
                   <div key={i} className="rounded-lg border p-4 bg-background">
                     <h3 className="font-medium">{e.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{e.details}</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {e.details}
+                    </p>
                     {e.time && (
-                      <p className="text-sm text-muted-foreground mt-2">Time: {e.time}</p>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Time: {e.time}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -257,37 +302,49 @@ export default function Calendar() {
         </div>
       </div>
       <div className="mt-8 rounded-xl border bg-card p-6">
-        <h2 className="text-lg font-semibold">Events for {format(viewMonth, "LLLL yyyy")}</h2>
+        <h2 className="text-lg font-semibold">
+          Events for {format(viewMonth, "LLLL yyyy")}
+        </h2>
         {eventDates.length === 0 ? (
-          <p className="mt-2 text-sm text-muted-foreground">No highlighted events yet.</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            No highlighted events yet.
+          </p>
         ) : (
           <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[...eventDates]
-              .sort()
-              .map((ds) => (
-                <div key={ds} className="rounded-lg border p-4 bg-background">
-                  <div className="text-sm text-muted-foreground">{format(new Date(ds + "T00:00:00"), "PPP")}</div>
-                  <div className="mt-2 space-y-3">
-                    {(eventsByDate[ds] || []).map((e, i) => (
-                      <div key={i}>
-                        <h3 className="font-medium">{e.title}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">{e.details}</p>
-                        {e.time && (
-                          <p className="text-sm text-muted-foreground mt-1">Time: {e.time}</p>
-                        )}
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          <Button asChild size="sm">
-                            <NavLink to={`/poojas/regular/${slugify(e.title)}`}>Book Pooja</NavLink>
-                          </Button>
-                          <Button asChild size="sm" variant="outline">
-                            <NavLink to="/poojas/special">Book Pariharam Pooja</NavLink>
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+            {[...eventDates].sort().map((ds) => (
+              <div key={ds} className="rounded-lg border p-4 bg-background">
+                <div className="text-sm text-muted-foreground">
+                  {format(new Date(ds + "T00:00:00"), "PPP")}
                 </div>
-              ))}
+                <div className="mt-2 space-y-3">
+                  {(eventsByDate[ds] || []).map((e, i) => (
+                    <div key={i}>
+                      <h3 className="font-medium">{e.title}</h3>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {e.details}
+                      </p>
+                      {e.time && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Time: {e.time}
+                        </p>
+                      )}
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <Button asChild size="sm">
+                          <NavLink to={`/poojas/regular/${slugify(e.title)}`}>
+                            Book Pooja
+                          </NavLink>
+                        </Button>
+                        <Button asChild size="sm" variant="outline">
+                          <NavLink to="/poojas/special">
+                            Book Pariharam Pooja
+                          </NavLink>
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

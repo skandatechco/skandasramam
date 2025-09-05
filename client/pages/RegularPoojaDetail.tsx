@@ -5,7 +5,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { NavLink, useParams } from "react-router-dom";
 
 function slugify(s: string) {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
 }
 
 type Detail = {
@@ -212,9 +215,16 @@ export default function RegularPoojaDetail() {
               </div>
               <div>
                 <Label htmlFor="intent">Intent / Sankalpam</Label>
-                <Textarea id="intent" name="intent" rows={4} placeholder="Describe your intent or sankalpam" />
+                <Textarea
+                  id="intent"
+                  name="intent"
+                  rows={4}
+                  placeholder="Describe your intent or sankalpam"
+                />
               </div>
-              <Button type="submit" className="mt-2">Book Pooja</Button>
+              <Button type="submit" className="mt-2">
+                Book Pooja
+              </Button>
             </form>
           </div>
         </div>

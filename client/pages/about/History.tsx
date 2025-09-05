@@ -6,26 +6,55 @@ const HERO_IMG = ""; // Optional: background image URL for hero (full-width)
 const SWAMI_PORTRAIT = ""; // Optional: portrait URL for Sri Santhananda Swamigal
 
 const HIGHLIGHTS: { icon: JSX.Element; text: string }[] = [
-  { icon: <Star className="h-5 w-5" />, text: "First temple in India devoted to Ugraprathyangira Devi and a modern shrine for Sarabheswara." },
-  { icon: <Landmark className="h-5 w-5" />, text: "Grand shrines for Bhuvaneswari, Ganapathy, Durga Parameswari, Siddhars, and Mahasahasralingamurthy (1008 lingams)." },
-  { icon: <Flame className="h-5 w-5" />, text: "Installation of Purna Maha Meru and regular yagnas, aligned with Swamigal’s teachings." },
-  { icon: <BookText className="h-5 w-5" />, text: "Serves as a spiritual hub for Vedic learning, worship, and large-scale community rituals." },
-  { icon: <Sparkles className="h-5 w-5" />, text: "A living expression of Swamigal’s mission — ancient mantras and rituals for collective welfare." },
+  {
+    icon: <Star className="h-5 w-5" />,
+    text: "First temple in India devoted to Ugraprathyangira Devi and a modern shrine for Sarabheswara.",
+  },
+  {
+    icon: <Landmark className="h-5 w-5" />,
+    text: "Grand shrines for Bhuvaneswari, Ganapathy, Durga Parameswari, Siddhars, and Mahasahasralingamurthy (1008 lingams).",
+  },
+  {
+    icon: <Flame className="h-5 w-5" />,
+    text: "Installation of Purna Maha Meru and regular yagnas, aligned with Swamigal’s teachings.",
+  },
+  {
+    icon: <BookText className="h-5 w-5" />,
+    text: "Serves as a spiritual hub for Vedic learning, worship, and large-scale community rituals.",
+  },
+  {
+    icon: <Sparkles className="h-5 w-5" />,
+    text: "A living expression of Swamigal’s mission — ancient mantras and rituals for collective welfare.",
+  },
 ];
 
 const TIMELINE: { year: string; text: string }[] = [
-  { year: "1990s", text: "Vision and planning of Skandasramam by Sri Santhananda Swamigal." },
+  {
+    year: "1990s",
+    text: "Vision and planning of Skandasramam by Sri Santhananda Swamigal.",
+  },
   { year: "1999", text: "Consecration of the Chennai Om Skandasramam." },
   { year: "2000s", text: "Establishment of shrines for Devi and Siddhars." },
-  { year: "Today", text: "Continues as a center of Vedic learning and public worship." },
+  {
+    year: "Today",
+    text: "Continues as a center of Vedic learning and public worship.",
+  },
 ];
 
 const QUICK_FACTS: { aspect: string; details: string }[] = [
   { aspect: "Founder", details: "Sri Santhananda Swamigal" },
   { aspect: "Chennai Temple", details: "Om Skandasramam, Selaiyur" },
   { aspect: "Consecration", details: "24 June 1999" },
-  { aspect: "Main Deities", details: "Ugraprathyangira Devi, Sarabheswara, Bhuvaneswari, Ganapathy, Siddhars" },
-  { aspect: "Legacy", details: "Pioneer of public Vedic yagnas, Shakti temples, spiritual democratization" },
+  {
+    aspect: "Main Deities",
+    details:
+      "Ugraprathyangira Devi, Sarabheswara, Bhuvaneswari, Ganapathy, Siddhars",
+  },
+  {
+    aspect: "Legacy",
+    details:
+      "Pioneer of public Vedic yagnas, Shakti temples, spiritual democratization",
+  },
 ];
 
 const GALLERY_IMAGES: string[] = [];
@@ -36,11 +65,25 @@ export default function AboutHistory() {
       {/* Hero Section with optional background image */}
       <section
         className="relative border-b"
-        style={HERO_IMG ? { backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.45)), url(${HERO_IMG})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
+        style={
+          HERO_IMG
+            ? {
+                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.45)), url(${HERO_IMG})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }
+            : {}
+        }
       >
-        <div className={`container py-16 text-center ${HERO_IMG ? "text-white" : ""}`}>
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">The Sacred History of Skandasramam</h1>
-          <p className={`mt-3 max-w-2xl mx-auto ${HERO_IMG ? "text-white/90" : "text-muted-foreground"}`}>
+        <div
+          className={`container py-16 text-center ${HERO_IMG ? "text-white" : ""}`}
+        >
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+            The Sacred History of Skandasramam
+          </h1>
+          <p
+            className={`mt-3 max-w-2xl mx-auto ${HERO_IMG ? "text-white/90" : "text-muted-foreground"}`}
+          >
             A journey of vision, devotion, and divine grace.
           </p>
         </div>
@@ -52,18 +95,23 @@ export default function AboutHistory() {
           {SWAMI_PORTRAIT && (
             <div className="md:col-span-1">
               <div className="rounded-xl overflow-hidden border bg-muted aspect-[4/5]">
-                <img src={SWAMI_PORTRAIT} alt="Sri Santhananda Swamigal" className="w-full h-full object-cover" />
+                <img
+                  src={SWAMI_PORTRAIT}
+                  alt="Sri Santhananda Swamigal"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           )}
           <div className={SWAMI_PORTRAIT ? "md:col-span-2" : "md:col-span-3"}>
             <h2 className="text-2xl font-bold">The Vision</h2>
             <div className="mt-3 space-y-4 text-muted-foreground max-w-prose">
+              <p>The Chennai Om Skandasramam</p>
               <p>
-                The Chennai Om Skandasramam
-              </p>
-              <p>
-                Consecrated on 24 June 1999 by Sri Santhananda Swamigal, the Chennai Om Skandasramam at Selaiyur is a unique temple complex dedicated to rare but powerful forms of divinity: Goddess Ugraprathyangira Devi and Lord Sarabheswara.
+                Consecrated on 24 June 1999 by Sri Santhananda Swamigal, the
+                Chennai Om Skandasramam at Selaiyur is a unique temple complex
+                dedicated to rare but powerful forms of divinity: Goddess
+                Ugraprathyangira Devi and Lord Sarabheswara.
               </p>
             </div>
           </div>
@@ -77,7 +125,9 @@ export default function AboutHistory() {
           {HIGHLIGHTS.map((h, i) => (
             <div key={i} className="rounded-xl border p-4 bg-card">
               <div className="flex items-start gap-3">
-                <div className="shrink-0 rounded-md bg-primary/10 p-2 text-primary">{h.icon}</div>
+                <div className="shrink-0 rounded-md bg-primary/10 p-2 text-primary">
+                  {h.icon}
+                </div>
                 <p className="text-sm text-muted-foreground">{h.text}</p>
               </div>
             </div>
@@ -119,7 +169,9 @@ export default function AboutHistory() {
       <section className="py-12 bg-muted/40 border-y">
         <div className="container text-center max-w-3xl">
           <blockquote className="text-lg italic text-muted-foreground">
-            “The Chennai Om Skandasramam stands as a beacon of divine energy, uniting ancient traditions with modern devotion for the welfare of society.”
+            “The Chennai Om Skandasramam stands as a beacon of divine energy,
+            uniting ancient traditions with modern devotion for the welfare of
+            society.”
           </blockquote>
         </div>
       </section>
@@ -130,8 +182,15 @@ export default function AboutHistory() {
           <h2 className="text-2xl font-bold">Image Gallery</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {GALLERY_IMAGES.map((src, i) => (
-              <div key={i} className="rounded-xl overflow-hidden border bg-muted aspect-video">
-                <img src={src} alt="Historical event" className="w-full h-full object-cover" />
+              <div
+                key={i}
+                className="rounded-xl overflow-hidden border bg-muted aspect-video"
+              >
+                <img
+                  src={src}
+                  alt="Historical event"
+                  className="w-full h-full object-cover"
+                />
               </div>
             ))}
           </div>

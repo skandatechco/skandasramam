@@ -7,13 +7,26 @@ export default function AboutAsramam() {
         {/* Left: Text */}
         <div className="text-muted-foreground space-y-4 max-w-prose">
           <p>
-            Srimath Sathguru Santhananda Swamiji had a dream of founding an Asramam in Chennai, the Capital City of Tamil Nadu. Eventually, his dream became a reality and the Asramam now is functioning in No 1 Kambar Street, Rajakilpakkam, East Tambaram, Chennai 600 073.
+            Srimath Sathguru Santhananda Swamiji had a dream of founding an
+            Asramam in Chennai, the Capital City of Tamil Nadu. Eventually, his
+            dream became a reality and the Asramam now is functioning in No 1
+            Kambar Street, Rajakilpakkam, East Tambaram, Chennai 600 073.
           </p>
           <p>
-            The dedication ceremony for the Ashram was held on 24th June of 1999 under the guidance of his holiness.
+            The dedication ceremony for the Ashram was held on 24th June of 1999
+            under the guidance of his holiness.
           </p>
           <p>
-            It is Swamiji’s belief that if the Vedas are protected the world will prosper. Therefore, he is conducting Yajurveda Patasalas in Pudukkottai and Skandagiri. Here students get free boarding and lodging facilities. After Swamiji, who? Swamiji is never worried about the future. He has established two trusts, one for Pudukkottai Adhishtanam and another for Skandasramam. These trusts maintain accounts meticulously and up-to date. For the dissemination of spiritual ideas and to encourage scholars of Hinduism to express their ideas, Swamiji is conducting a Tamil monthly, “Sri Bhuvaneswari Vijayam”.
+            It is Swamiji’s belief that if the Vedas are protected the world
+            will prosper. Therefore, he is conducting Yajurveda Patasalas in
+            Pudukkottai and Skandagiri. Here students get free boarding and
+            lodging facilities. After Swamiji, who? Swamiji is never worried
+            about the future. He has established two trusts, one for Pudukkottai
+            Adhishtanam and another for Skandasramam. These trusts maintain
+            accounts meticulously and up-to date. For the dissemination of
+            spiritual ideas and to encourage scholars of Hinduism to express
+            their ideas, Swamiji is conducting a Tamil monthly, “Sri
+            Bhuvaneswari Vijayam”.
           </p>
         </div>
 
