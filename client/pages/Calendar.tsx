@@ -107,13 +107,17 @@ function deriveEvents(en: any) {
 export default function Calendar() {
   const { lat, lon, tz } = useChennaiDefaults();
   const [selected, setSelected] = useState<Date>(new Date());
+  const [viewMonth, setViewMonth] = useState<Date>(new Date());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dataTa, setDataTa] = useState<any | null>(null);
   const [dataEn, setDataEn] = useState<any | null>(null);
+  const [eventDates, setEventDates] = useState<string[]>([]);
+  const [monthComplete, setMonthComplete] = useState(false);
 
   const dateStr = format(selected, "yyyy-MM-dd");
 
+  // Fetch selected day details
   useEffect(() => {
     const fetchDay = async () => {
       setLoading(true);
@@ -145,9 +149,39 @@ export default function Calendar() {
     fetchDay();
   }, [dateStr, lat, lon, tz]);
 
+  // Progressive month events fetch for highlighting
+  useEffect(() => {
+    const year = viewMonth.getFullYear();
+    const month = viewMonth.getMonth() + 1;
+    let cancelled = false;
+    async function tick() {
+      try {
+        const r = await fetch(`/api/calendar/month?year=${year}&month=${month}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`);
+        const raw = await r.text();
+        let j: any = null;
+        try { j = JSON.parse(raw); } catch {}
+        if (!r.ok || !j?.ok) return;
+        const keys = Object.keys(j.eventsByDate || {});
+        if (!cancelled) {
+          setEventDates(keys);
+          setMonthComplete(Boolean(j.complete));
+        }
+      } catch {}
+    }
+    tick();
+    if (!monthComplete) {
+      const id = setInterval(tick, 15000); // poll every 15s to respect API rate limit
+      return () => { cancelled = true; clearInterval(id); };
+    }
+    return () => { cancelled = true; };
+  }, [viewMonth, lat, lon, tz, monthComplete]);
+
   const tamilNak = dataTa?.nakshatra?.name || "—";
   const tithiTa = dataTa?.tithi?.name || "—";
   const events = dataEn ? deriveEvents(dataEn) : [];
+
+  // Build modifiers for DayPicker
+  const eventDays = eventDates.map((ds) => new Date(ds + "T00:00:00"));
 
   return (
     <section className="container py-8 md:py-12">
@@ -161,10 +195,16 @@ export default function Calendar() {
             mode="single"
             selected={selected}
             onSelect={(d) => d && setSelected(d)}
+            onMonthChange={(m) => setViewMonth(m)}
             showOutsideDays
             ISOWeek
             className="rdp-tailwind"
+            modifiers={{ event: eventDays }}
+            modifiersClassNames={{ event: "bg-amber-200 text-amber-900 font-semibold rounded-full" }}
           />
+          {!monthComplete && (
+            <p className="mt-2 text-xs text-muted-foreground">Filling events for this month…</p>
+          )}
         </div>
         <div className="rounded-xl border bg-card p-6 grid gap-4 content-start">
           <div>
