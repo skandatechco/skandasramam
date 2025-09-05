@@ -42,12 +42,12 @@ export default function Index() {
           alt="Chennai Om Sri Skandashramam temple banner"
           className="absolute inset-0 -z-20 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 -z-10 bg-black/40" />
+        <div className="absolute inset-0 -z-10 bg-black/60" />
         <div className="container min-h-[70vh] md:min-h-[80vh] flex items-end py-10 pb-8 md:pb-12">
           <div className="grid w-full gap-6 md:grid-cols-2">
             {/* CTA 1 - Pariharam */}
             <div
-              className="rounded-2xl border p-6 md:p-8 backdrop-blur bg-white/90 shadow-lg"
+              className="rounded-2xl border p-4 md:p-6 backdrop-blur bg-white/60 shadow-lg md:max-w-md md:justify-self-start"
               style={{ borderColor: "#C04A3A" }}
             >
               <div className="flex items-start gap-3">
@@ -80,12 +80,12 @@ export default function Index() {
 
             {/* CTA 2 - Regular */}
             <div
-              className="rounded-2xl border p-6 md:p-8 backdrop-blur bg-white/90 shadow-lg"
+              className="rounded-2xl border p-4 md:p-6 backdrop-blur bg-white/60 shadow-lg md:max-w-md md:justify-self-end"
               style={{ borderColor: "#2F6C8A" }}
             >
               <div className="flex items-start gap-3">
                 <span className="text-2xl" aria-hidden>
-                  🔁
+                  ��
                 </span>
                 <div>
                   <h2 className="text-2xl font-extrabold tracking-tight">
