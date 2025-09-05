@@ -160,6 +160,59 @@ export function createServer() {
     }
   });
 
+  // Month events (progressive, rate-limit aware)
+  app.get("/api/calendar/month", async (req, res) => {
+    try {
+      const year = Number(req.query.year);
+      const month = Number(req.query.month); // 1-12
+      if (!year || !month)
+        return res.status(400).json({ ok: false, error: "Missing year/month" });
+      const latitude = Number(req.query.lat ?? 13.0827);
+      const longitude = Number(req.query.lon ?? 80.2707);
+      const timezone = String(req.query.tz ?? "Asia/Kolkata");
+      const key = `${year}-${month}|${latitude}|${longitude}|${timezone}`;
+      const now = Date.now();
+      let entry = monthCache.get(key);
+      const days = new Date(year, month, 0).getDate();
+      if (!entry || entry.expiresAt < now) {
+        entry = {
+          eventsByDate: {},
+          progress: 0,
+          days,
+          expiresAt: now + 6 * 60 * 60 * 1000,
+        };
+        monthCache.set(key, entry);
+      }
+
+      const MAX_PER_REQ = 4; // keep under 5/minute with client polling
+      let processed = 0;
+      while (entry.progress < entry.days && processed < MAX_PER_REQ) {
+        const day = entry.progress + 1; // 1-based day
+        const date = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        try {
+          const p = await getPanchang({
+            date,
+            latitude,
+            longitude,
+            timezone,
+            lang: "en",
+          });
+          const events = deriveRegularEventsFromPanchang(p);
+          if (events.length) entry.eventsByDate[date] = events;
+        } catch (_) {
+          // ignore individual day failures
+        }
+        entry.progress++;
+        processed++;
+      }
+
+      const complete = entry.progress >= entry.days;
+      res.json({ ok: true, complete, progress: entry.progress, eventsByDate: entry.eventsByDate });
+    } catch (e: any) {
+      res.status(500).json({ ok: false, error: e?.message || "Failed to build month events" });
+    }
+  });
+
   // Next occurrence of a given nakshatra within next N days
   app.get("/api/nakshatra/next", async (req, res) => {
     try {
