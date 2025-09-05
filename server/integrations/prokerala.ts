@@ -1,8 +1,47 @@
 import "dotenv/config";
 
 const BASE_URL = process.env.PROKERALA_BASE_URL?.replace(/\/$/, "") || "https://api.prokerala.com/astrology";
-function getToken() {
+const TOKEN_URL = (process.env.PROKERALA_TOKEN_URL || "https://api.prokerala.com/token").replace(/\/$/, "");
+const CLIENT_ID = process.env.PROKERALA_CLIENT_ID || process.env.PROKERALA_ID || "";
+const CLIENT_SECRET = process.env.PROKERALA_CLIENT_SECRET || process.env.PROKERALA_SECRET || "";
+
+let tokenCache: { accessToken: string; expiresAt: number } | null = null;
+
+function getStaticToken() {
   return process.env.PROKERALA_API_TOKEN || process.env.PROKERALA_TOKEN || "";
+}
+
+async function getAccessToken(): Promise<string> {
+  const staticToken = getStaticToken();
+  if (staticToken) return staticToken;
+
+  if (!CLIENT_ID || !CLIENT_SECRET) {
+    throw new Error("Missing PROKERALA_CLIENT_ID/PROKERALA_CLIENT_SECRET or PROKERALA_API_TOKEN.");
+  }
+
+  const now = Date.now();
+  if (tokenCache && tokenCache.expiresAt - 60_000 > now) {
+    return tokenCache.accessToken;
+  }
+
+  const basic = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64");
+  const res = await fetch(TOKEN_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${basic}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({ grant_type: "client_credentials" }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Token exchange failed ${res.status}: ${text}`);
+  }
+  const json: any = await res.json();
+  const accessToken = json.access_token as string;
+  const expiresIn = Number(json.expires_in || 3600);
+  tokenCache = { accessToken, expiresAt: now + expiresIn * 1000 };
+  return accessToken;
 }
 
 export interface PanchangResult {
@@ -24,8 +63,9 @@ export async function getPanchang({ date, latitude, longitude, timezone }: { dat
   url.searchParams.set("longitude", String(longitude));
   url.searchParams.set("timezone", timezone);
 
+  const token = await getAccessToken();
   const res = await fetch(url.toString(), {
-    headers: { Authorization: `Bearer ${getToken()}` },
+    headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) {
     const text = await res.text();
@@ -73,7 +113,7 @@ function normalize(s: string) {
 }
 
 function ensureToken() {
-  if (!getToken()) {
-    throw new Error("Missing PROKERALA_API_TOKEN. Set it in your environment (Vercel/Netlify env vars).");
+  if (!getStaticToken() && (!CLIENT_ID || !CLIENT_SECRET)) {
+    throw new Error("Missing Prokerala credentials. Set PROKERALA_API_TOKEN or PROKERALA_CLIENT_ID/PROKERALA_CLIENT_SECRET in env.");
   }
 }
