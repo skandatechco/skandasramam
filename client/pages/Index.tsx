@@ -273,11 +273,6 @@ export default function Index() {
             desc="AI-driven guidance based on Vedic astrology and life milestones. Sync to Google/Apple Calendar."
           />
           <Feature
-            icon={Users}
-            title="Family Heritage Management"
-            desc="Multi-generational practice tracking, role-based permissions for elders and children."
-          />
-          <Feature
             icon={BookMarked}
             title="Automated Devotee Care"
             desc="Birthstar poojas, anniversaries, and observances with smart reminders and follow-ups."
