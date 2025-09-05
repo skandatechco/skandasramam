@@ -270,6 +270,25 @@ function toNamed(x: any, lang?: string): { name: string } | null {
     langKey && x?.karana?.[langKey],
     x?.karana?.name,
   ].filter(Boolean) as string[];
-  const name = candidates[0];
+  const name = candidates[0] || deepFindName(x, lang);
   return name ? { name } : null;
+}
+
+function deepFindName(obj: any, lang?: string): string | null {
+  const visited = new Set<any>();
+  const queue: any[] = [obj];
+  const langKey = lang ? `name_${lang}` : undefined;
+  while (queue.length) {
+    const cur = queue.shift();
+    if (!cur || typeof cur !== "object" || visited.has(cur)) continue;
+    visited.add(cur);
+    if (langKey && typeof cur[langKey] === "string") return cur[langKey];
+    if (typeof cur.name === "string") return cur.name;
+    for (const k of Object.keys(cur)) {
+      if (k === "raw") continue;
+      const v = (cur as any)[k];
+      if (v && typeof v === "object") queue.push(v);
+    }
+  }
+  return null;
 }
