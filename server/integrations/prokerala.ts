@@ -89,7 +89,7 @@ export async function getPanchang({
   lang?: string;
 }): Promise<PanchangResult> {
   ensureToken();
-  const cacheKey = `${date}|${latitude}|${longitude}|${timezone}`;
+  const cacheKey = `${date}|${latitude}|${longitude}|${timezone}|${lang}`;
   const now = Date.now();
   const cached = panchangCache.get(cacheKey);
   if (cached && cached.expiresAt > now) return cached.data;
