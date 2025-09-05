@@ -4,6 +4,97 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { getPanchang, findNextNakshatra } from "./integrations/prokerala";
 
+// In-memory month cache for highlighted events (rate-limit aware)
+const monthCache = new Map<
+  string,
+  {
+    eventsByDate: Record<string, { title: string; details: string; time?: string }[]>;
+    progress: number; // processed days count
+    days: number;
+    expiresAt: number;
+  }
+>();
+
+function norm(s: string) {
+  return (s || "").toLowerCase().normalize("NFKD").replace(/[^a-z]/g, "");
+}
+
+function deriveRegularEventsFromPanchang(en: any) {
+  const events: { title: string; details: string; time?: string }[] = [];
+  const tithi = norm(en?.tithi?.name || "");
+  const star = norm(en?.nakshatra?.name || "");
+  const add = (title: string, details: string, time?: string) =>
+    events.push({ title, details, time });
+  if (/purnima|pournami|fullmoon/.test(tithi)) {
+    add(
+      "Pournami / Full Moon",
+      "Special abhishekam to Goddess Matha Bhuvaneswari and Lord Dattatreya.",
+      "10:00 AM",
+    );
+  }
+  if (/amavasya|amavasai|newmoon/.test(tithi)) {
+    add(
+      "Amavasya (New Moon)",
+      "Special abhishekam to Goddess Prathiyankara Devi and Lord Pancha Mukha Anjaneyar.",
+      "10:00 AM",
+    );
+  }
+  if (/chaturthi/.test(tithi)) {
+    add(
+      "Sankata Hara Chaturthi",
+      "Special abhishekam to Lord Pancha Mukha Heramba Maha Ganapathy and Kamala Siddhi Vinayakar.",
+      "10:30 AM",
+    );
+  }
+  if (/ashtami/.test(tithi)) {
+    add(
+      "Krishna Paksha Ashtami",
+      "Special abhishekam to Goddess Asta Dasa Bhuja Durga Parameswari; Navavarna puja in evening.",
+      "Abhishekam 10:30 AM • Navavarna 6:00 PM",
+    );
+  }
+  if (/trayodashi/.test(tithi)) {
+    add(
+      "Maha Pradosham",
+      "Grand celebration for Sri Mahasahasralingamurthy and Lord Nandikeswarar with Mahanyasam and special abhishekam; deeparadanai and prasad.",
+      "Mahanyasam 5:00 PM • Abhishekam 5:30 PM • Deeparadanai 6:30 PM",
+    );
+  }
+  if (/krittika|krithika|krithigai/.test(star)) {
+    add("Krithigai", "Special abhishekam to Lord Swaminatha Swami.", "10:00 AM");
+  }
+  if (/uttaraphalguni|uttaraphalgun|uthiram/.test(star)) {
+    add(
+      "Uthiram Nakshatram",
+      "Special abhishekam to Lord Ayyapan followed by alankaram and deeparadanai.",
+      "10:30 AM",
+    );
+  }
+  if (/chitra|chithirai/.test(star)) {
+    add(
+      "Chitirai Nakshatram",
+      "Special abhishekam and alankaram to Lord Mahasudarshana Murthy followed by deeparadanai.",
+      "10:30 AM",
+    );
+  }
+  if (/swati|swathi/.test(star)) {
+    add(
+      "Swathi Nakshatram",
+      "Special abhishekam and alankaram to Lord Lakshmi Narasimhar followed by deeparadanai.",
+      "10:30 AM",
+    );
+  }
+  if (/vishakha|vishaka|visakam|vishagam/.test(star)) {
+    add(
+      "Vishakam (Vishagam) Nakshatram",
+      "Birth star of Sathguru Shrimath Santhananda Swamigal; special abhishekam and alankaram to Sathguru at the Ashram.",
+      "10:30 AM",
+    );
+  }
+  // Exclude Navavarna and Annadanam from highlighting
+  return events.filter((e) => !/navavarna/i.test(e.title) && !/annadanam/i.test(e.title));
+}
+
 export function createServer() {
   const app = express();
 
