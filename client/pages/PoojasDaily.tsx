@@ -26,7 +26,7 @@ const items: Item[] = [
     time: "Abhishekam 10:30 AM • Navavarna 6:00 PM",
   },
   {
-    title: "Maha Pradosham",
+    title: "Pradosham",
     details:
       "Grand celebration for Sri Mahasahasralingamurthy and Lord Nandikeswarar with Mahanyasam and special abhishekam; deeparadanai and prasad distribution.",
     time: "Mahanyasam 5:00 PM • Abhishekam 5:30 PM • Deeparadanai 6:30 PM",
@@ -95,6 +95,10 @@ const items: Item[] = [
   },
 ];
 
+function slugify(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+}
+
 export default function PoojasDaily() {
   return (
     <section className="container py-10 md:py-14">
@@ -134,7 +138,7 @@ export default function PoojasDaily() {
                 </Button>
               ) : (
                 <Button asChild>
-                  <NavLink to="/bookings">Book Pooja</NavLink>
+                  <NavLink to={`/poojas/regular/${slugify(it.title)}`}>Book Pooja</NavLink>
                 </Button>
               )}
             </div>
