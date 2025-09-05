@@ -49,7 +49,7 @@ export function Header() {
               className="h-8 w-8 object-cover"
             />
           </div>
-          <span className="font-extrabold tracking-tight text-lg whitespace-nowrap hidden sm:block">
+          <span className="font-extrabold tracking-tight text-lg whitespace-nowrap block">
             Chennai Om Sri Skandashramam
           </span>
         </NavLink>
