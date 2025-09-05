@@ -165,6 +165,7 @@ export default function Calendar() {
         const keys = Object.keys(j.eventsByDate || {});
         if (!cancelled) {
           setEventDates(keys);
+          setEventsByDate(j.eventsByDate || {});
           setMonthComplete(Boolean(j.complete));
         }
       } catch {}
