@@ -52,7 +52,7 @@ function deriveEvents(en: any) {
   }
   if (/trayodashi/.test(tithi)) {
     add(
-      "Maha Pradosham",
+      "Pradosham",
       "Grand celebration for Sri Mahasahasralingamurthy and Lord Nandikeswarar with Mahanyasam and special abhishekam; deeparadanai and prasad.",
       "Mahanyasam 5:00 PM • Abhishekam 5:30 PM • Deeparadanai 6:30 PM",
     );
