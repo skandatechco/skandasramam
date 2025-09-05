@@ -1,11 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  CalendarDays,
-  Users,
-  BookMarked,
-  Download,
-  Mic,
-} from "lucide-react";
+import { CalendarDays, Users, BookMarked, Download, Mic } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
@@ -290,7 +284,6 @@ export default function Index() {
           />
         </div>
       </section>
-
 
       {/* Accessibility & Offline */}
       <section className="container py-12 md:py-16">

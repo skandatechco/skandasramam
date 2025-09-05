@@ -96,7 +96,10 @@ const items: Item[] = [
 ];
 
 function slugify(s: string) {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
 }
 
 export default function PoojasDaily() {
@@ -138,7 +141,9 @@ export default function PoojasDaily() {
                 </Button>
               ) : (
                 <Button asChild>
-                  <NavLink to={`/poojas/regular/${slugify(it.title)}`}>Book Pooja</NavLink>
+                  <NavLink to={`/poojas/regular/${slugify(it.title)}`}>
+                    Book Pooja
+                  </NavLink>
                 </Button>
               )}
             </div>
