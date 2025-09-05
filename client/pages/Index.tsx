@@ -42,36 +42,19 @@ export default function Index() {
           alt="Chennai Om Sri Skandashramam temple banner"
           className="absolute inset-0 -z-20 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 -z-10 bg-black/60" />
+        <div className="absolute inset-0 -z-10 bg-black/20" />
         <div className="container min-h-[70vh] md:min-h-[80vh] flex items-end py-10 pb-8 md:pb-12">
           <div className="grid w-full gap-6 md:grid-cols-2">
             {/* CTA 1 - Pariharam */}
             <div
-              className="rounded-2xl border p-4 md:p-6 backdrop-blur bg-white/60 shadow-lg md:max-w-md md:justify-self-start"
+              className="rounded-full border p-1.5 backdrop-blur bg-white/40 shadow-md w-max md:justify-self-start"
               style={{ borderColor: "#C04A3A" }}
             >
-              <div className="flex items-start gap-3">
-                <span className="text-2xl" aria-hidden>
-                  ✨
-                </span>
-                <div>
-                  <h2 className="text-2xl font-extrabold tracking-tight">
-                    One-Time Pariharam Pooja
-                  </h2>
-                  <p className="mt-2 text-sm md:text-base text-muted-foreground">
-                    Perform a special Sezhippu (remedial pooja) to remove
-                    obstacles, seek relief from doshas, or fulfill a vow. Choose
-                    your intent and we will arrange the rituals with devotion.
-                  </p>
-                </div>
-              </div>
-              <div className="mt-5">
+              <div className="flex items-center">
                 <a
                   href="/bookings"
-                  className="inline-flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-semibold text-white"
-                  style={{
-                    background: "linear-gradient(90deg,#C04A3A,#D4A017)",
-                  }}
+                  className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white"
+                  style={{ background: "linear-gradient(90deg,#C04A3A,#D4A017)" }}
                 >
                   👉 Book Pariharam Pooja
                 </a>
@@ -80,31 +63,14 @@ export default function Index() {
 
             {/* CTA 2 - Regular */}
             <div
-              className="rounded-2xl border p-4 md:p-6 backdrop-blur bg-white/60 shadow-lg md:max-w-md md:justify-self-end"
+              className="rounded-full border p-1.5 backdrop-blur bg-white/40 shadow-md w-max md:justify-self-end"
               style={{ borderColor: "#2F6C8A" }}
             >
-              <div className="flex items-start gap-3">
-                <span className="text-2xl" aria-hidden>
-                  ��
-                </span>
-                <div>
-                  <h2 className="text-2xl font-extrabold tracking-tight">
-                    Regular Pooja for Ongoing Blessings
-                  </h2>
-                  <p className="mt-2 text-sm md:text-base text-muted-foreground">
-                    Schedule poojas on a daily, weekly, monthly, or auspicious
-                    date such as your nakshatra, birthday, or anniversary. Stay
-                    connected to divine grace with regular worship.
-                  </p>
-                </div>
-              </div>
-              <div className="mt-5">
+              <div className="flex items-center">
                 <a
                   href="/poojas/regular"
-                  className="inline-flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-semibold text-white"
-                  style={{
-                    background: "linear-gradient(90deg,#2F6C8A,#5A8F5F)",
-                  }}
+                  className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white"
+                  style={{ background: "linear-gradient(90deg,#2F6C8A,#5A8F5F)" }}
                 >
                   🙏 Book Regular Pooja
                 </a>
