@@ -80,11 +80,13 @@ export async function getPanchang({
   latitude,
   longitude,
   timezone,
+  lang = "en",
 }: {
   date: string;
   latitude: number;
   longitude: number;
   timezone: string;
+  lang?: string;
 }): Promise<PanchangResult> {
   ensureToken();
   const cacheKey = `${date}|${latitude}|${longitude}|${timezone}`;
@@ -97,7 +99,7 @@ export async function getPanchang({
   url.searchParams.set("ayanamsa", "1"); // Lahiri
   url.searchParams.set("coordinates", `${latitude},${longitude}`);
   url.searchParams.set("datetime", dt);
-  url.searchParams.set("la", "en");
+  url.searchParams.set("la", lang);
 
   const token = await getAccessToken();
   const res = await fetch(url.toString(), {
