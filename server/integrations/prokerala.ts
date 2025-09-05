@@ -131,8 +131,13 @@ function getOffsetForTimeZone(date: Date, timeZone: string): string {
     }).formatToParts(date);
     const tzName = parts.find((p) => p.type === "timeZoneName")?.value || "UTC";
     // tzName like GMT+5:30 or UTC+5:30
-    const m = tzName.match(/([+-]\d{1,2}:\d{2})/);
-    if (m) return m[1].padStart(6, m[1].startsWith("-") ? "-0" : "+0");
+    const m = tzName.match(/([+-])(\d{1,2}):(\d{2})/);
+    if (m) {
+      const sign = m[1];
+      const hh = m[2].padStart(2, "0");
+      const mm = m[3];
+      return `${sign}${hh}:${mm}`;
+    }
   } catch {}
   if (timeZone === "Asia/Kolkata") return "+05:30";
   return "+00:00";
