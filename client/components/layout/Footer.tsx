@@ -17,14 +17,6 @@ export function Footer() {
             <li>Bookings & Donations</li>
           </ul>
         </div>
-        <div>
-          <h4 className="font-semibold">Compliance</h4>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li>GDPR & Indian IT compliance</li>
-            <li>Role-based permissions</li>
-            <li>Encrypted counseling</li>
-          </ul>
-        </div>
       </div>
       <div className="border-t">
         <div className="container py-6 text-xs text-muted-foreground flex flex-col md:flex-row gap-3 items-center justify-between">
