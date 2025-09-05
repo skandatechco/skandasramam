@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-const BASE_URL = process.env.PROKERALA_BASE_URL?.replace(/\/$/, "") || "https://api.prokerala.com/astrology";
+const BASE_URL = process.env.PROKERALA_BASE_URL?.replace(/\/$/, "") || "https://api.prokerala.com/v2/astrology";
 const TOKEN_URL = (process.env.PROKERALA_TOKEN_URL || "https://api.prokerala.com/token").replace(/\/$/, "");
 const CLIENT_ID = process.env.PROKERALA_CLIENT_ID || process.env.PROKERALA_ID || "";
 const CLIENT_SECRET = process.env.PROKERALA_CLIENT_SECRET || process.env.PROKERALA_SECRET || "";
@@ -58,10 +58,11 @@ export interface PanchangResult {
 export async function getPanchang({ date, latitude, longitude, timezone }: { date: string; latitude: number; longitude: number; timezone: string; }): Promise<PanchangResult> {
   ensureToken();
   const url = new URL(`${BASE_URL}/panchang`);
-  url.searchParams.set("date", date);
-  url.searchParams.set("latitude", String(latitude));
-  url.searchParams.set("longitude", String(longitude));
-  url.searchParams.set("timezone", timezone);
+  const dt = buildDateTime(date, timezone);
+  url.searchParams.set("ayanamsa", "1"); // Lahiri
+  url.searchParams.set("coordinates", `${latitude},${longitude}`);
+  url.searchParams.set("datetime", dt);
+  url.searchParams.set("la", "en");
 
   const token = await getAccessToken();
   const res = await fetch(url.toString(), {
@@ -74,12 +75,13 @@ export async function getPanchang({ date, latitude, longitude, timezone }: { dat
   const data = await res.json();
 
   // Normalize fields defensively
-  const tithi = data?.data?.tithi || data?.tithi || null;
-  const nakshatra = data?.data?.nakshatra || data?.nakshatra || null;
-  const yoga = data?.data?.yoga || data?.yoga || null;
-  const karana = data?.data?.karana || data?.karana || null;
-  const sunrise = data?.data?.sunrise || data?.sunrise;
-  const sunset = data?.data?.sunset || data?.sunset;
+  const d = data?.data || data;
+  const tithi = d?.tithi || null;
+  const nakshatra = d?.nakshatra || null;
+  const yoga = d?.yoga || null;
+  const karana = d?.karana || null;
+  const sunrise = d?.sunrise;
+  const sunset = d?.sunset;
 
   return { date, sunrise, sunset, tithi, nakshatra, yoga, karana, raw: data };
 }
@@ -110,6 +112,30 @@ function equalsNakshatra(a: string, b: string) {
 
 function normalize(s: string) {
   return s.toLowerCase().replace(/[^a-z]/g, "");
+}
+
+function buildDateTime(dateStr: string, timeZone: string) {
+  // Use 12:00:00 local to avoid edge cases
+  const base = new Date(`${dateStr}T12:00:00Z`);
+  const offset = getOffsetForTimeZone(base, timeZone);
+  return `${dateStr}T12:00:00${offset}`;
+}
+
+function getOffsetForTimeZone(date: Date, timeZone: string): string {
+  try {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZoneName: "shortOffset",
+    }).formatToParts(date);
+    const tzName = parts.find((p) => p.type === "timeZoneName")?.value || "UTC";
+    // tzName like GMT+5:30 or UTC+5:30
+    const m = tzName.match(/([+-]\d{1,2}:\d{2})/);
+    if (m) return m[1].padStart(6, m[1].startsWith("-") ? "-0" : "+0");
+  } catch {}
+  if (timeZone === "Asia/Kolkata") return "+05:30";
+  return "+00:00";
 }
 
 function ensureToken() {
