@@ -113,6 +113,7 @@ function NakshatraFinder() {
         setResult(j.data?.date);
       } catch {
         const raw = await clone.text();
+        if (raw.includes("rate limit") || raw.includes("429")) setCooldown(60);
         throw new Error(raw || `Status ${r.status}`);
       }
     } catch (e: any) {
