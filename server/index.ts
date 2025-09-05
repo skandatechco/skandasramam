@@ -198,8 +198,10 @@ export function createServer() {
             lang: "en",
           });
 
-          // Only highlight specified nakshatras on the calendar
+          // Highlight specified tithis and nakshatras on the calendar
           const star = norm((p?.nakshatra as any)?.name || "");
+          const tithi = norm((p?.tithi as any)?.name || "");
+
           const highlightStar =
             /krittika|krithika|krithigai/.test(star) ||
             /uttaraphalguni|uttaraphalgun|uthiram/.test(star) ||
@@ -207,11 +209,25 @@ export function createServer() {
             /swati|swathi/.test(star) ||
             /vishakha|vishaka|visakam|vishagam/.test(star);
 
-          if (highlightStar) {
+          const highlightTithi =
+            /chaturthi/.test(tithi) ||
+            /ashtami/.test(tithi) ||
+            /trayodashi/.test(tithi) ||
+            /amavasya|amavasai|newmoon/.test(tithi) ||
+            /purnima|pournami|fullmoon/.test(tithi);
+
+          if (highlightStar || highlightTithi) {
             const events = deriveRegularEventsFromPanchang(p).filter((e) =>
-              /(Krithigai|Uthiram|Chitirai|Swathi|Vishakam)/i.test(e.title),
+              /(Sankata Hara Chaturthi|Krishna Paksha Ashtami|Maha Pradosham|Amavasya \(New Moon\)|Pournami \/ Full Moon|Krithigai|Uthiram Nakshatram|Chitirai Nakshatram|Swathi Nakshatram|Vishakam \(Vishagam\) Nakshatram)/i.test(
+                e.title,
+              ),
             );
-            entry.eventsByDate[date] = events.length ? events : [{ title: (p.nakshatra as any)?.name || "Nakshatra", details: "Special abhishekam and deeparadanai." }];
+            entry.eventsByDate[date] = events.length
+              ? events
+              : [{
+                  title: (p.nakshatra as any)?.name || (p.tithi as any)?.name || "Event",
+                  details: "Special abhishekam and deeparadanai.",
+                }];
           }
         } catch (_) {
           // ignore individual day failures
