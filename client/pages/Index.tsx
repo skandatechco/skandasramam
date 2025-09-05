@@ -1,12 +1,8 @@
 import { Button } from "@/components/ui/button";
 import {
   CalendarDays,
-  HeartHandshake,
-  Stars,
   Users,
   BookMarked,
-  ShieldCheck,
-  Trophy,
   Download,
   Mic,
 } from "lucide-react";
@@ -294,51 +290,9 @@ export default function Index() {
             title="Automated Devotee Care"
             desc="Birthstar poojas, anniversaries, and observances with smart reminders and follow-ups."
           />
-          <Feature
-            icon={HeartHandshake}
-            title="Mentorship & Community"
-            desc="Mentor matching, progress tracking, and community engagement."
-          />
-          <Feature
-            icon={Stars}
-            title="Operational Excellence"
-            desc="Modern booking, donations, and admin tools optimized for festivals and peak load."
-          />
-          <Feature
-            icon={Trophy}
-            title="Gamification"
-            desc="Daily streaks, badges, and Family Legacy Points to nurture consistent practice."
-          />
         </div>
       </section>
 
-      {/* KPI band */}
-      <section className="bg-secondary">
-        <div className="container py-12 grid gap-6 text-center md:grid-cols-4">
-          <div>
-            <p className="text-3xl font-extrabold">90%</p>
-            <p className="text-sm text-muted-foreground">Practice continuity</p>
-          </div>
-          <div>
-            <p className="text-3xl font-extrabold">300%</p>
-            <p className="text-sm text-muted-foreground">
-              Community engagement
-            </p>
-          </div>
-          <div>
-            <p className="text-3xl font-extrabold">70%</p>
-            <p className="text-sm text-muted-foreground">
-              Admin overhead reduced
-            </p>
-          </div>
-          <div>
-            <p className="text-3xl font-extrabold">250%</p>
-            <p className="text-sm text-muted-foreground">
-              Recurring bookings growth
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Accessibility & Offline */}
       <section className="container py-12 md:py-16">
