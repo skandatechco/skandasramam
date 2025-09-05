@@ -1,13 +1,14 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
-import { Sparkles } from "lucide-react";
+import { Menu, Sparkles } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -75,6 +76,9 @@ export function Header() {
             <NavLink to="/bookings">Book a Pooja</NavLink>
           </Button>
         </div>
+        <div className="md:hidden">
+          <MobileMenu />
+        </div>
       </div>
     </header>
   );
@@ -107,6 +111,48 @@ function AboutDropdown() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function MobileMenu() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <button aria-label="Open menu" className="inline-flex items-center justify-center rounded-md p-2 border">
+          <Menu className="h-5 w-5" />
+        </button>
+      </SheetTrigger>
+      <SheetContent side="left" className="w-[300px] p-0">
+        <div className="p-4 border-b">
+          <NavLink to="/" className="font-bold" aria-label="Home">
+            Chennai Om Sri Skandashramam
+          </NavLink>
+        </div>
+        <nav className="p-2 grid gap-1 text-sm">
+          <NavLink to="/calendar" className="px-3 py-2 rounded-md hover:bg-secondary">View Calendar</NavLink>
+          <NavLink to="/bookings" className="px-3 py-2 rounded-md hover:bg-secondary">Book a Pooja</NavLink>
+          <div className="mt-2 px-3 pt-3 text-xs uppercase text-muted-foreground">Poojas</div>
+          <NavLink to="/poojas/regular" className="px-3 py-2 rounded-md hover:bg-secondary">Regular Pooja</NavLink>
+          <NavLink to="/poojas/special" className="px-3 py-2 rounded-md hover:bg-secondary">Special Poojas</NavLink>
+          <div className="mt-2 px-3 pt-3 text-xs uppercase text-muted-foreground">About</div>
+          <NavLink to="/about/asramam" className="px-3 py-2 rounded-md hover:bg-secondary">Asramam</NavLink>
+          <NavLink to="/about/history" className="px-3 py-2 rounded-md hover:bg-secondary">History</NavLink>
+          <NavLink to="/about/swamiji" className="px-3 py-2 rounded-md hover:bg-secondary">Swamiji</NavLink>
+          <NavLink to="/about/deities" className="px-3 py-2 rounded-md hover:bg-secondary">Deities</NavLink>
+          <div className="mt-2 px-3 pt-3 text-xs uppercase text-muted-foreground">More</div>
+          {nav.map((n) => (
+            <NavLink key={n.to} to={n.to} className="px-3 py-2 rounded-md hover:bg-secondary">
+              {n.label}
+            </NavLink>
+          ))}
+          <div className="p-3">
+            <SheetClose asChild>
+              <button className="w-full mt-2 rounded-md border px-3 py-2">Close</button>
+            </SheetClose>
+          </div>
+        </nav>
+      </SheetContent>
+    </Sheet>
   );
 }
 
