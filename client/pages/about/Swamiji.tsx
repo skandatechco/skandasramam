@@ -34,7 +34,7 @@ export default function AboutSwamiji() {
           </div>
 
           <h2 className="mt-8 text-2xl font-bold">Swamiji, His Guru and Great Guru</h2>
-          <div className="mt-4 rounded-xl overflow-hidden border bg-muted">
+          <div className="mt-4 rounded-xl overflow-hidden border bg-muted w-1/2 mx-auto">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F982c525ed71b4aecb07284a69278ef3d%2F9980975cea904cef9e552341220f6ef9?format=webp&width=800"
               alt="Swamiji, His Guru and Great Guru"
