@@ -55,7 +55,7 @@ function deriveRegularEventsFromPanchang(en: any) {
   }
   if (/trayodashi/.test(tithi)) {
     add(
-      "Maha Pradosham",
+      "Pradosham",
       "Grand celebration for Sri Mahasahasralingamurthy and Lord Nandikeswarar with Mahanyasam and special abhishekam; deeparadanai and prasad.",
       "Mahanyasam 5:00 PM • Abhishekam 5:30 PM • Deeparadanai 6:30 PM",
     );
@@ -218,7 +218,7 @@ export function createServer() {
 
           if (highlightStar || highlightTithi) {
             const events = deriveRegularEventsFromPanchang(p).filter((e) =>
-              /(Sankata Hara Chaturthi|Krishna Paksha Ashtami|Maha Pradosham|Amavasya \(New Moon\)|Pournami \/ Full Moon|Krithigai|Uthiram Nakshatram|Chitirai Nakshatram|Swathi Nakshatram|Vishakam \(Vishagam\) Nakshatram)/i.test(
+              /(Sankata Hara Chaturthi|Krishna Paksha Ashtami|Pradosham|Maha Pradosham|Amavasya \(New Moon\)|Pournami \/ Full Moon|Krithigai|Uthiram Nakshatram|Chitirai Nakshatram|Swathi Nakshatram|Vishakam \(Vishagam\) Nakshatram)/i.test(
                 e.title,
               ),
             );
