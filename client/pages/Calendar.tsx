@@ -124,15 +124,14 @@ export default function Calendar() {
           fetch(`/api/panchangam?date=${dateStr}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&la=en`),
         ]);
         const parse = async (r: Response) => {
-          const c = r.clone();
-          try {
-            const j = await r.json();
-            if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
-            return j.data;
-          } catch {
-            const raw = await c.text();
-            throw new Error(raw || `Status ${r.status}`);
+          const raw = await r.text();
+          let j: any = null;
+          try { j = JSON.parse(raw); } catch {}
+          if (!r.ok || !j?.ok) {
+            const msg = (j && (j.error || j.message)) || raw || `Status ${r.status}`;
+            throw new Error(msg);
           }
+          return j.data;
         };
         const [ta, en] = await Promise.all([parse(rTa), parse(rEn)]);
         setDataTa(ta);
