@@ -113,10 +113,10 @@ export async function getPanchang({
 
   // Normalize fields defensively
   const d = data?.data || data;
-  const tithi = toNamed(d?.tithi);
-  const nakshatra = toNamed(d?.nakshatra);
-  const yoga = toNamed(d?.yoga);
-  const karana = toNamed(d?.karana);
+  const tithi = toNamed(d?.tithi, lang);
+  const nakshatra = toNamed(d?.nakshatra, lang);
+  const yoga = toNamed(d?.yoga, lang);
+  const karana = toNamed(d?.karana, lang);
   const sunrise = d?.sunrise;
   const sunset = d?.sunset;
 
@@ -240,18 +240,24 @@ function ensureToken() {
   }
 }
 
-function toNamed(x: any): { name: string } | null {
+function toNamed(x: any, lang?: string): { name: string } | null {
   if (!x) return null;
-  const name =
-    x.name ||
-    x?.details?.name ||
-    x?.details?.tithi?.name ||
-    x?.details?.nakshatra?.name ||
-    x?.details?.yoga?.name ||
-    x?.details?.karana?.name ||
-    x?.tithi?.name ||
-    x?.nakshatra?.name ||
-    x?.yoga?.name ||
-    x?.karana?.name;
+  if (typeof x === "string") return { name: x };
+  const langKey = lang ? `name_${lang}` : undefined;
+  const candidates = [
+    langKey && x[langKey],
+    x.name_ta, x.name_hi, x.name_ml, x.name_te,
+    x.name,
+    langKey && x?.details?.[langKey], x?.details?.name,
+    langKey && x?.details?.tithi?.[langKey], x?.details?.tithi?.name,
+    langKey && x?.details?.nakshatra?.[langKey], x?.details?.nakshatra?.name,
+    langKey && x?.details?.yoga?.[langKey], x?.details?.yoga?.name,
+    langKey && x?.details?.karana?.[langKey], x?.details?.karana?.name,
+    langKey && x?.tithi?.[langKey], x?.tithi?.name,
+    langKey && x?.nakshatra?.[langKey], x?.nakshatra?.name,
+    langKey && x?.yoga?.[langKey], x?.yoga?.name,
+    langKey && x?.karana?.[langKey], x?.karana?.name,
+  ].filter(Boolean) as string[];
+  const name = candidates[0];
   return name ? { name } : null;
 }
