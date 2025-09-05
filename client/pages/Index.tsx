@@ -49,13 +49,12 @@ function PanchangStrip() {
       `/api/panchangam/today?date=${date}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`,
     )
       .then(async (r) => {
-        const clone = r.clone();
+        const raw = await r.text();
         try {
-          const j = await r.json();
+          const j = JSON.parse(raw);
           if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
           return j.data;
         } catch {
-          const raw = await clone.text();
           throw new Error(raw || `Status ${r.status}`);
         }
       })
@@ -140,13 +139,12 @@ function NakshatraFinder() {
       const r = await fetch(
         `/api/nakshatra/next?n=${encodeURIComponent(n)}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&start=${start}`,
       );
-      const clone = r.clone();
+      const raw = await r.text();
       try {
-        const j = await r.json();
+        const j = JSON.parse(raw);
         if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
         setResult(j.data?.date);
       } catch {
-        const raw = await clone.text();
         if (raw.includes("rate limit") || raw.includes("429")) setCooldown(60);
         throw new Error(raw || `Status ${r.status}`);
       }
