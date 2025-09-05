@@ -26,12 +26,22 @@ export function createServer() {
       const latitude = Number(req.query.lat ?? 13.0827);
       const longitude = Number(req.query.lon ?? 80.2707);
       const timezone = String(req.query.tz ?? "Asia/Kolkata");
-      const date = String(req.query.date ?? new Date().toISOString().slice(0, 10));
+      const date = String(
+        req.query.date ?? new Date().toISOString().slice(0, 10),
+      );
       const lang = String(req.query.la ?? req.query.lang ?? "en");
-      const data = await getPanchang({ date, latitude, longitude, timezone, lang });
+      const data = await getPanchang({
+        date,
+        latitude,
+        longitude,
+        timezone,
+        lang,
+      });
       res.json({ ok: true, data });
     } catch (e: any) {
-      res.status(500).json({ ok: false, error: e?.message || "Failed to fetch panchangam" });
+      res
+        .status(500)
+        .json({ ok: false, error: e?.message || "Failed to fetch panchangam" });
     }
   });
 
@@ -41,11 +51,21 @@ export function createServer() {
       const latitude = Number(req.query.lat ?? 13.0827);
       const longitude = Number(req.query.lon ?? 80.2707);
       const timezone = String(req.query.tz ?? "Asia/Kolkata");
-      const date = String(req.query.date ?? new Date().toISOString().slice(0, 10));
-      const data = await getPanchang({ date, latitude, longitude, timezone, lang: "en" });
+      const date = String(
+        req.query.date ?? new Date().toISOString().slice(0, 10),
+      );
+      const data = await getPanchang({
+        date,
+        latitude,
+        longitude,
+        timezone,
+        lang: "en",
+      });
       res.json({ ok: true, data });
     } catch (e: any) {
-      res.status(500).json({ ok: false, error: e?.message || "Failed to fetch panchangam" });
+      res
+        .status(500)
+        .json({ ok: false, error: e?.message || "Failed to fetch panchangam" });
     }
   });
 
@@ -78,12 +98,10 @@ export function createServer() {
           .json({ ok: false, error: "Not found within range" });
       res.json({ ok: true, data: next });
     } catch (e: any) {
-      res
-        .status(500)
-        .json({
-          ok: false,
-          error: e?.message || "Failed to compute next nakshatra",
-        });
+      res.status(500).json({
+        ok: false,
+        error: e?.message || "Failed to compute next nakshatra",
+      });
     }
   });
 

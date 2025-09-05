@@ -7,7 +7,10 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
 function useChennaiDefaults() {
-  return useMemo(() => ({ lat: 13.0827, lon: 80.2707, tz: "Asia/Kolkata" }), []);
+  return useMemo(
+    () => ({ lat: 13.0827, lon: 80.2707, tz: "Asia/Kolkata" }),
+    [],
+  );
 }
 
 export default function Calendar() {
@@ -24,7 +27,9 @@ export default function Calendar() {
       setLoading(true);
       setError(null);
       try {
-        const r = await fetch(`/api/panchangam?date=${dateStr}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&la=ta`);
+        const r = await fetch(
+          `/api/panchangam?date=${dateStr}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&la=ta`,
+        );
         const clone = r.clone();
         try {
           const j = await r.json();
@@ -50,7 +55,9 @@ export default function Calendar() {
     <section className="container py-8 md:py-12">
       <div className="mb-6 flex items-center gap-2">
         <CalendarIcon className="h-5 w-5 text-primary" />
-        <h1 className="text-2xl md:text-3xl font-bold">Tamil Panchangam Calendar</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">
+          Tamil Panchangam Calendar
+        </h1>
       </div>
       <div className="grid md:grid-cols-2 gap-8">
         <div className="rounded-xl border bg-card p-4">
