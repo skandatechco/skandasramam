@@ -93,7 +93,13 @@ function NakshatraFinder() {
   const [error, setError] = useState<string | null>(null);
   const [cooldown, setCooldown] = useState(0);
 
-   const onFind = async () => {
+   useEffect(() => {
+    if (cooldown <= 0) return;
+    const id = setInterval(() => setCooldown((c) => (c > 0 ? c - 1 : 0)), 1000);
+    return () => clearInterval(id);
+  }, [cooldown]);
+
+  const onFind = async () => {
     setLoading(true);
     setResult(null);
     setError(null);
