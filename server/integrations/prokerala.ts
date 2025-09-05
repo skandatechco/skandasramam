@@ -6,6 +6,9 @@ const CLIENT_ID = process.env.PROKERALA_CLIENT_ID || process.env.PROKERALA_ID ||
 const CLIENT_SECRET = process.env.PROKERALA_CLIENT_SECRET || process.env.PROKERALA_SECRET || "";
 
 let tokenCache: { accessToken: string; expiresAt: number } | null = null;
+const panchangCache = new Map<string, { data: PanchangResult; expiresAt: number }>();
+const nextNakshatraCache = new Map<string, { date: string; expiresAt: number }>();
+const nextNakshatraProgress = new Map<string, { lastIndex: number; updatedAt: number }>();
 
 function getStaticToken() {
   return process.env.PROKERALA_API_TOKEN || process.env.PROKERALA_TOKEN || "";
@@ -57,6 +60,11 @@ export interface PanchangResult {
 
 export async function getPanchang({ date, latitude, longitude, timezone }: { date: string; latitude: number; longitude: number; timezone: string; }): Promise<PanchangResult> {
   ensureToken();
+  const cacheKey = `${date}|${latitude}|${longitude}|${timezone}`;
+  const now = Date.now();
+  const cached = panchangCache.get(cacheKey);
+  if (cached && cached.expiresAt > now) return cached.data;
+
   const url = new URL(`${BASE_URL}/panchang`);
   const dt = buildDateTime(date, timezone);
   url.searchParams.set("ayanamsa", "1"); // Lahiri
@@ -83,13 +91,25 @@ export async function getPanchang({ date, latitude, longitude, timezone }: { dat
   const sunrise = d?.sunrise;
   const sunset = d?.sunset;
 
-  return { date, sunrise, sunset, tithi, nakshatra, yoga, karana, raw: data };
+  const result: PanchangResult = { date, sunrise, sunset, tithi, nakshatra, yoga, karana, raw: data };
+  // Cache for 5 minutes
+  panchangCache.set(cacheKey, { data: result, expiresAt: now + 5 * 60 * 1000 });
+  return result;
 }
 
 export async function findNextNakshatra({ targetNakshatra, startDate, latitude, longitude, timezone, maxDays = 60 }: { targetNakshatra: string; startDate: string; latitude: number; longitude: number; timezone: string; maxDays?: number; }): Promise<{ date: string; name: string } | null> {
   ensureToken();
+  const cacheKey = `${normalize(targetNakshatra)}|${startDate}|${latitude}|${longitude}|${timezone}`;
+  const now = Date.now();
+  const cached = nextNakshatraCache.get(cacheKey);
+  if (cached && cached.expiresAt > now) return { date: cached.date, name: targetNakshatra };
+
+  const progress = nextNakshatraProgress.get(cacheKey) || { lastIndex: 0, updatedAt: 0 };
   const start = new Date(startDate + "T00:00:00");
-  for (let i = 0; i < maxDays; i++) {
+  const MAX_CALLS_PER_REQ = 4; // respect 5/min limit
+  const begin = progress.lastIndex;
+  const end = Math.min(begin + MAX_CALLS_PER_REQ, maxDays);
+  for (let i = begin; i < end; i++) {
     const d = new Date(start);
     d.setDate(start.getDate() + i);
     const dateStr = d.toISOString().slice(0, 10);
@@ -97,12 +117,17 @@ export async function findNextNakshatra({ targetNakshatra, startDate, latitude, 
       const p = await getPanchang({ date: dateStr, latitude, longitude, timezone });
       const name: string | undefined = (p.nakshatra as any)?.name;
       if (name && equalsNakshatra(name, targetNakshatra)) {
+        // cache for a day
+        nextNakshatraCache.set(cacheKey, { date: dateStr, expiresAt: now + 24 * 60 * 60 * 1000 });
+        nextNakshatraProgress.delete(cacheKey);
         return { date: dateStr, name };
       }
     } catch (_e) {
       // continue on error
     }
   }
+  // update progress for next attempt
+  nextNakshatraProgress.set(cacheKey, { lastIndex: end, updatedAt: now });
   return null;
 }
 
