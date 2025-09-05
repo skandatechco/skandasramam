@@ -131,8 +131,8 @@ function NakshatraFinder() {
           <option key={x} value={x}>{x}</option>
         ))}
       </select>
-      <button onClick={onFind} disabled={loading} className="inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium text-white" style={{ background: "linear-gradient(90deg,#2F6C8A,#5A8F5F)" }}>
-        {loading ? "Finding…" : "Find Date"}
+      <button onClick={onFind} disabled={loading || cooldown > 0} className="inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium text-white disabled:opacity-60" style={{ background: "linear-gradient(90deg,#2F6C8A,#5A8F5F)" }}>
+        {loading ? "Finding…" : cooldown > 0 ? `Wait ${cooldown}s` : "Find Date"}
       </button>
       {result && (
         <span className="ml-2">Next {n}: <span className="font-semibold">{result}</span> <a href="/bookings" className="underline ml-2">Book Ayush Homam</a></span>
