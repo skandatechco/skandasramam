@@ -256,6 +256,41 @@ export default function Calendar() {
           </div>
         </div>
       </div>
+      <div className="mt-8 rounded-xl border bg-card p-6">
+        <h2 className="text-lg font-semibold">Events for {format(viewMonth, "LLLL yyyy")}</h2>
+        {eventDates.length === 0 ? (
+          <p className="mt-2 text-sm text-muted-foreground">No highlighted events yet.</p>
+        ) : (
+          <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {[...eventDates]
+              .sort()
+              .map((ds) => (
+                <div key={ds} className="rounded-lg border p-4 bg-background">
+                  <div className="text-sm text-muted-foreground">{format(new Date(ds + "T00:00:00"), "PPP")}</div>
+                  <div className="mt-2 space-y-3">
+                    {(eventsByDate[ds] || []).map((e, i) => (
+                      <div key={i}>
+                        <h3 className="font-medium">{e.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">{e.details}</p>
+                        {e.time && (
+                          <p className="text-sm text-muted-foreground mt-1">Time: {e.time}</p>
+                        )}
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <Button asChild size="sm">
+                            <NavLink to={`/poojas/regular/${slugify(e.title)}`}>Book Pooja</NavLink>
+                          </Button>
+                          <Button asChild size="sm" variant="outline">
+                            <NavLink to="/poojas/special">Book Pariharam Pooja</NavLink>
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
