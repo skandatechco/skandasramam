@@ -90,6 +90,14 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Panchangam strip */}
+      <section className="bg-background/80 border-t border-b">
+        <div className="container py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <PanchangStrip />
+          <NakshatraFinder />
+        </div>
+      </section>
+
       {/* Feature grid */}
       <section className="container py-10 md:py-16">
         <div className="grid gap-6 md:grid-cols-3">
