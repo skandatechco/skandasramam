@@ -3,7 +3,11 @@
   "buildCommand": "pnpm run build:client",
   "outputDirectory": "dist/spa",
   "builds": [
-    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist/spa" } }
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist/spa" }
+    }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
