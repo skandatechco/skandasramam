@@ -93,7 +93,9 @@ function NakshatraFinder() {
     try {
       const start = new Date().toISOString().slice(0, 10);
       const r = await fetch(`/api/nakshatra/next?n=${encodeURIComponent(n)}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&start=${start}`);
-      const j = await r.json();
+      const raw = await r.text();
+      let j: any = {};
+      try { j = JSON.parse(raw); } catch { j = { ok: false, error: raw || `Status ${r.status}` }; }
       if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
       setResult(j.data?.date);
     } catch (e: any) {
