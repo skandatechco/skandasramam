@@ -197,8 +197,22 @@ export function createServer() {
             timezone,
             lang: "en",
           });
-          const events = deriveRegularEventsFromPanchang(p);
-          if (events.length) entry.eventsByDate[date] = events;
+
+          // Only highlight specified nakshatras on the calendar
+          const star = norm((p?.nakshatra as any)?.name || "");
+          const highlightStar =
+            /krittika|krithika|krithigai/.test(star) ||
+            /uttaraphalguni|uttaraphalgun|uthiram/.test(star) ||
+            /chitra|chithirai/.test(star) ||
+            /swati|swathi/.test(star) ||
+            /vishakha|vishaka|visakam|vishagam/.test(star);
+
+          if (highlightStar) {
+            const events = deriveRegularEventsFromPanchang(p).filter((e) =>
+              /(Krithigai|Uthiram|Chitirai|Swathi|Vishakam)/i.test(e.title),
+            );
+            entry.eventsByDate[date] = events.length ? events : [{ title: (p.nakshatra as any)?.name || "Nakshatra", details: "Special abhishekam and deeparadanai." }];
+          }
         } catch (_) {
           // ignore individual day failures
         }
