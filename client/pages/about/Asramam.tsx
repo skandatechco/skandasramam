@@ -31,7 +31,7 @@ export default function AboutAsramam() {
         </div>
 
         {/* Right: Image */}
-        <div className="md:order-last order-first">
+        <div>
           <div className="rounded-xl overflow-hidden border bg-muted">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F982c525ed71b4aecb07284a69278ef3d%2F55f20fd625ba4e1c820eda890cdb06e4?format=webp&width=800"
