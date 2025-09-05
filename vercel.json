@@ -2,17 +2,6 @@
   "installCommand": "pnpm config set require-scripts-approval false && pnpm install --frozen-lockfile",
   "buildCommand": "pnpm run build:client",
   "outputDirectory": "dist/spa",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist/spa" }
-    }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
