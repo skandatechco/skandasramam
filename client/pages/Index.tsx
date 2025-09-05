@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CalendarDays, Users, BookMarked, Download, Mic } from "lucide-react";
+import { CalendarDays, BookMarked, Download, Mic } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
