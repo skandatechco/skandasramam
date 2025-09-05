@@ -1,14 +1,29 @@
 import "dotenv/config";
 
-const BASE_URL = process.env.PROKERALA_BASE_URL?.replace(/\/$/, "") || "https://api.prokerala.com/v2/astrology";
-const TOKEN_URL = (process.env.PROKERALA_TOKEN_URL || "https://api.prokerala.com/token").replace(/\/$/, "");
-const CLIENT_ID = process.env.PROKERALA_CLIENT_ID || process.env.PROKERALA_ID || "";
-const CLIENT_SECRET = process.env.PROKERALA_CLIENT_SECRET || process.env.PROKERALA_SECRET || "";
+const BASE_URL =
+  process.env.PROKERALA_BASE_URL?.replace(/\/$/, "") ||
+  "https://api.prokerala.com/v2/astrology";
+const TOKEN_URL = (
+  process.env.PROKERALA_TOKEN_URL || "https://api.prokerala.com/token"
+).replace(/\/$/, "");
+const CLIENT_ID =
+  process.env.PROKERALA_CLIENT_ID || process.env.PROKERALA_ID || "";
+const CLIENT_SECRET =
+  process.env.PROKERALA_CLIENT_SECRET || process.env.PROKERALA_SECRET || "";
 
 let tokenCache: { accessToken: string; expiresAt: number } | null = null;
-const panchangCache = new Map<string, { data: PanchangResult; expiresAt: number }>();
-const nextNakshatraCache = new Map<string, { date: string; expiresAt: number }>();
-const nextNakshatraProgress = new Map<string, { lastIndex: number; updatedAt: number }>();
+const panchangCache = new Map<
+  string,
+  { data: PanchangResult; expiresAt: number }
+>();
+const nextNakshatraCache = new Map<
+  string,
+  { date: string; expiresAt: number }
+>();
+const nextNakshatraProgress = new Map<
+  string,
+  { lastIndex: number; updatedAt: number }
+>();
 
 function getStaticToken() {
   return process.env.PROKERALA_API_TOKEN || process.env.PROKERALA_TOKEN || "";
@@ -19,7 +34,9 @@ async function getAccessToken(): Promise<string> {
   if (staticToken) return staticToken;
 
   if (!CLIENT_ID || !CLIENT_SECRET) {
-    throw new Error("Missing PROKERALA_CLIENT_ID/PROKERALA_CLIENT_SECRET or PROKERALA_API_TOKEN.");
+    throw new Error(
+      "Missing PROKERALA_CLIENT_ID/PROKERALA_CLIENT_SECRET or PROKERALA_API_TOKEN.",
+    );
   }
 
   const now = Date.now();
@@ -58,7 +75,17 @@ export interface PanchangResult {
   raw: any;
 }
 
-export async function getPanchang({ date, latitude, longitude, timezone }: { date: string; latitude: number; longitude: number; timezone: string; }): Promise<PanchangResult> {
+export async function getPanchang({
+  date,
+  latitude,
+  longitude,
+  timezone,
+}: {
+  date: string;
+  latitude: number;
+  longitude: number;
+  timezone: string;
+}): Promise<PanchangResult> {
   ensureToken();
   const cacheKey = `${date}|${latitude}|${longitude}|${timezone}`;
   const now = Date.now();
@@ -91,20 +118,47 @@ export async function getPanchang({ date, latitude, longitude, timezone }: { dat
   const sunrise = d?.sunrise;
   const sunset = d?.sunset;
 
-  const result: PanchangResult = { date, sunrise, sunset, tithi, nakshatra, yoga, karana, raw: data };
+  const result: PanchangResult = {
+    date,
+    sunrise,
+    sunset,
+    tithi,
+    nakshatra,
+    yoga,
+    karana,
+    raw: data,
+  };
   // Cache for 5 minutes
   panchangCache.set(cacheKey, { data: result, expiresAt: now + 5 * 60 * 1000 });
   return result;
 }
 
-export async function findNextNakshatra({ targetNakshatra, startDate, latitude, longitude, timezone, maxDays = 60 }: { targetNakshatra: string; startDate: string; latitude: number; longitude: number; timezone: string; maxDays?: number; }): Promise<{ date: string; name: string } | null> {
+export async function findNextNakshatra({
+  targetNakshatra,
+  startDate,
+  latitude,
+  longitude,
+  timezone,
+  maxDays = 60,
+}: {
+  targetNakshatra: string;
+  startDate: string;
+  latitude: number;
+  longitude: number;
+  timezone: string;
+  maxDays?: number;
+}): Promise<{ date: string; name: string } | null> {
   ensureToken();
   const cacheKey = `${normalize(targetNakshatra)}|${startDate}|${latitude}|${longitude}|${timezone}`;
   const now = Date.now();
   const cached = nextNakshatraCache.get(cacheKey);
-  if (cached && cached.expiresAt > now) return { date: cached.date, name: targetNakshatra };
+  if (cached && cached.expiresAt > now)
+    return { date: cached.date, name: targetNakshatra };
 
-  const progress = nextNakshatraProgress.get(cacheKey) || { lastIndex: 0, updatedAt: 0 };
+  const progress = nextNakshatraProgress.get(cacheKey) || {
+    lastIndex: 0,
+    updatedAt: 0,
+  };
   const start = new Date(startDate + "T00:00:00");
   const MAX_CALLS_PER_REQ = 4; // respect 5/min limit
   const begin = progress.lastIndex;
@@ -114,11 +168,19 @@ export async function findNextNakshatra({ targetNakshatra, startDate, latitude, 
     d.setDate(start.getDate() + i);
     const dateStr = d.toISOString().slice(0, 10);
     try {
-      const p = await getPanchang({ date: dateStr, latitude, longitude, timezone });
+      const p = await getPanchang({
+        date: dateStr,
+        latitude,
+        longitude,
+        timezone,
+      });
       const name: string | undefined = (p.nakshatra as any)?.name;
       if (name && equalsNakshatra(name, targetNakshatra)) {
         // cache for a day
-        nextNakshatraCache.set(cacheKey, { date: dateStr, expiresAt: now + 24 * 60 * 60 * 1000 });
+        nextNakshatraCache.set(cacheKey, {
+          date: dateStr,
+          expiresAt: now + 24 * 60 * 60 * 1000,
+        });
         nextNakshatraProgress.delete(cacheKey);
         return { date: dateStr, name };
       }
@@ -170,12 +232,24 @@ function getOffsetForTimeZone(date: Date, timeZone: string): string {
 
 function ensureToken() {
   if (!getStaticToken() && (!CLIENT_ID || !CLIENT_SECRET)) {
-    throw new Error("Missing Prokerala credentials. Set PROKERALA_API_TOKEN or PROKERALA_CLIENT_ID/PROKERALA_CLIENT_SECRET in env.");
+    throw new Error(
+      "Missing Prokerala credentials. Set PROKERALA_API_TOKEN or PROKERALA_CLIENT_ID/PROKERALA_CLIENT_SECRET in env.",
+    );
   }
 }
 
 function toNamed(x: any): { name: string } | null {
   if (!x) return null;
-  const name = x.name || x?.details?.name || x?.details?.tithi?.name || x?.details?.nakshatra?.name || x?.details?.yoga?.name || x?.details?.karana?.name || x?.tithi?.name || x?.nakshatra?.name || x?.yoga?.name || x?.karana?.name;
+  const name =
+    x.name ||
+    x?.details?.name ||
+    x?.details?.tithi?.name ||
+    x?.details?.nakshatra?.name ||
+    x?.details?.yoga?.name ||
+    x?.details?.karana?.name ||
+    x?.tithi?.name ||
+    x?.nakshatra?.name ||
+    x?.yoga?.name ||
+    x?.karana?.name;
   return name ? { name } : null;
 }

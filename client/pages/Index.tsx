@@ -34,7 +34,10 @@ function Feature({
 }
 
 function useChennaiDefaults() {
-  return useMemo(() => ({ lat: 13.0827, lon: 80.2707, tz: "Asia/Kolkata" }), []);
+  return useMemo(
+    () => ({ lat: 13.0827, lon: 80.2707, tz: "Asia/Kolkata" }),
+    [],
+  );
 }
 
 function PanchangStrip() {
@@ -46,7 +49,9 @@ function PanchangStrip() {
   useEffect(() => {
     const date = new Date().toISOString().slice(0, 10);
     setLoading(true);
-    fetch(`/api/panchangam/today?date=${date}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`)
+    fetch(
+      `/api/panchangam/today?date=${date}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`,
+    )
       .then(async (r) => {
         const clone = r.clone();
         try {
@@ -63,7 +68,12 @@ function PanchangStrip() {
       .finally(() => setLoading(false));
   }, [lat, lon, tz]);
 
-  if (loading) return <div className="text-sm text-muted-foreground">Loading today’s panchangam…</div>;
+  if (loading)
+    return (
+      <div className="text-sm text-muted-foreground">
+        Loading today’s panchangam…
+      </div>
+    );
   if (error) return <div className="text-sm text-destructive">{error}</div>;
   const tithi = data?.tithi?.name ?? data?.tithi ?? "—";
   const nakshatra = data?.nakshatra?.name ?? data?.nakshatra ?? "—";
@@ -82,7 +92,33 @@ function PanchangStrip() {
 }
 
 const NAKSHATRAS = [
-  "Ashwini","Bharani","Krittika","Rohini","Mrigashirsha","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"
+  "Ashwini",
+  "Bharani",
+  "Krittika",
+  "Rohini",
+  "Mrigashirsha",
+  "Ardra",
+  "Punarvasu",
+  "Pushya",
+  "Ashlesha",
+  "Magha",
+  "Purva Phalguni",
+  "Uttara Phalguni",
+  "Hasta",
+  "Chitra",
+  "Swati",
+  "Vishakha",
+  "Anuradha",
+  "Jyeshtha",
+  "Mula",
+  "Purva Ashadha",
+  "Uttara Ashadha",
+  "Shravana",
+  "Dhanishta",
+  "Shatabhisha",
+  "Purva Bhadrapada",
+  "Uttara Bhadrapada",
+  "Revati",
 ];
 
 function NakshatraFinder() {
@@ -93,7 +129,7 @@ function NakshatraFinder() {
   const [error, setError] = useState<string | null>(null);
   const [cooldown, setCooldown] = useState(0);
 
-   useEffect(() => {
+  useEffect(() => {
     if (cooldown <= 0) return;
     const id = setInterval(() => setCooldown((c) => (c > 0 ? c - 1 : 0)), 1000);
     return () => clearInterval(id);
@@ -105,7 +141,9 @@ function NakshatraFinder() {
     setError(null);
     try {
       const start = new Date().toISOString().slice(0, 10);
-      const r = await fetch(`/api/nakshatra/next?n=${encodeURIComponent(n)}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&start=${start}`);
+      const r = await fetch(
+        `/api/nakshatra/next?n=${encodeURIComponent(n)}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&start=${start}`,
+      );
       const clone = r.clone();
       try {
         const j = await r.json();
@@ -126,18 +164,44 @@ function NakshatraFinder() {
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm">
       <label className="text-muted-foreground">Next Nakshatra:</label>
-      <select value={n} onChange={(e) => setN(e.target.value)} className="px-2 py-1 rounded-md border bg-background">
+      <select
+        value={n}
+        onChange={(e) => setN(e.target.value)}
+        className="px-2 py-1 rounded-md border bg-background"
+      >
         {NAKSHATRAS.map((x) => (
-          <option key={x} value={x}>{x}</option>
+          <option key={x} value={x}>
+            {x}
+          </option>
         ))}
       </select>
-      <button onClick={onFind} disabled={loading || cooldown > 0} className="inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium text-white disabled:opacity-60" style={{ background: "linear-gradient(90deg,#2F6C8A,#5A8F5F)" }}>
-        {loading ? "Finding…" : cooldown > 0 ? `Wait ${cooldown}s` : "Find Date"}
+      <button
+        onClick={onFind}
+        disabled={loading || cooldown > 0}
+        className="inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium text-white disabled:opacity-60"
+        style={{ background: "linear-gradient(90deg,#2F6C8A,#5A8F5F)" }}
+      >
+        {loading
+          ? "Finding…"
+          : cooldown > 0
+            ? `Wait ${cooldown}s`
+            : "Find Date"}
       </button>
       {result && (
-        <span className="ml-2">Next {n}: <span className="font-semibold">{result}</span> <a href="/bookings" className="underline ml-2">Book Ayush Homam</a></span>
+        <span className="ml-2">
+          Next {n}: <span className="font-semibold">{result}</span>{" "}
+          <a href="/bookings" className="underline ml-2">
+            Book Ayush Homam
+          </a>
+        </span>
       )}
-      {error && <span className="text-destructive ml-2">{error.includes('rate limit') || error.includes('429') ? 'Rate limited, please try again in a minute.' : error}</span>}
+      {error && (
+        <span className="text-destructive ml-2">
+          {error.includes("rate limit") || error.includes("429")
+            ? "Rate limited, please try again in a minute."
+            : error}
+        </span>
+      )}
     </div>
   );
 }
@@ -168,7 +232,9 @@ export default function Index() {
                   <a
                     href="/bookings"
                     className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white"
-                    style={{ background: "linear-gradient(90deg,#C04A3A,#D4A017)" }}
+                    style={{
+                      background: "linear-gradient(90deg,#C04A3A,#D4A017)",
+                    }}
                   >
                     👉 Book Pariharam Pooja
                   </a>
@@ -189,7 +255,9 @@ export default function Index() {
                   <a
                     href="/poojas/regular"
                     className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white"
-                    style={{ background: "linear-gradient(90deg,#2F6C8A,#5A8F5F)" }}
+                    style={{
+                      background: "linear-gradient(90deg,#2F6C8A,#5A8F5F)",
+                    }}
                   >
                     🙏 Book Regular Pooja
                   </a>
