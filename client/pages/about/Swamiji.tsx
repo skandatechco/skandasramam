@@ -32,15 +32,17 @@ export default function AboutSwamiji() {
               Swami Santananda also is associated with this holy city. This place is associated with the divine wedding of Lord Siva.
             </p>
           </div>
+        </div>
+      </div>
 
-          <h2 className="mt-8 text-2xl font-bold">Swamiji, His Guru and Great Guru</h2>
-          <div className="mt-4 rounded-xl overflow-hidden border bg-muted w-full md:w-1/3 mx-auto">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F982c525ed71b4aecb07284a69278ef3d%2F9980975cea904cef9e552341220f6ef9?format=webp&width=800"
-              alt="Swamiji, His Guru and Great Guru"
-              className="w-full h-auto object-cover"
-            />
-          </div>
+      <h2 className="mt-10 text-2xl font-bold text-center">Swamiji, His Guru and Great Guru</h2>
+      <div className="mt-4 flex justify-center">
+        <div className="rounded-xl overflow-hidden border bg-muted w-full sm:w-2/3 md:w-1/3">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F982c525ed71b4aecb07284a69278ef3d%2F9980975cea904cef9e552341220f6ef9?format=webp&width=800"
+            alt="Swamiji, His Guru and Great Guru"
+            className="w-full h-auto object-cover"
+          />
         </div>
       </div>
     </main>
