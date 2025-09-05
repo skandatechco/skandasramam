@@ -12,7 +12,6 @@ import {
 const nav = [
   { to: "/", label: "Home" },
   { to: "/events", label: "Events" },
-  { to: "/about", label: "About" },
   { to: "/gallery", label: "Gallery" },
   { to: "/resources", label: "Resources" },
   { to: "/charity", label: "Charity" },
@@ -51,6 +50,8 @@ export function Header() {
         <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
           {/* Poojas dropdown */}
           <PoojasDropdown />
+          {/* About dropdown */}
+          <AboutDropdown />
           {nav.map((n) => (
             <NavLink
               key={n.to}
@@ -76,6 +77,36 @@ export function Header() {
         </div>
       </div>
     </header>
+  );
+}
+
+function AboutDropdown() {
+  const location = useLocation();
+  const active = location.pathname.startsWith("/about");
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={`px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary transition-colors ${active ? "text-primary" : "text-foreground/80"}`}
+        >
+          About
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuItem asChild>
+          <NavLink to="/about/asramam">Asramam</NavLink>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <NavLink to="/about/history">History</NavLink>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <NavLink to="/about/swamiji">Swamiji</NavLink>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <NavLink to="/about/deities">Deities</NavLink>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
