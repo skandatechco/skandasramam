@@ -77,9 +77,6 @@ export function Header() {
           <Button asChild variant="outline">
             <NavLink to="/calendar">View Calendar</NavLink>
           </Button>
-          <Button asChild>
-            <NavLink to="/bookings">Book a Pooja</NavLink>
-          </Button>
         </div>
         <div className="md:hidden">
           <MobileMenu />
@@ -142,12 +139,6 @@ function MobileMenu() {
             className="px-3 py-2 rounded-md hover:bg-secondary"
           >
             View Calendar
-          </NavLink>
-          <NavLink
-            to="/bookings"
-            className="px-3 py-2 rounded-md hover:bg-secondary"
-          >
-            Book a Pooja
           </NavLink>
           <div className="mt-2 px-3 pt-3 text-xs uppercase text-muted-foreground">
             Poojas
