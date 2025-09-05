@@ -137,7 +137,7 @@ function NakshatraFinder() {
       {result && (
         <span className="ml-2">Next {n}: <span className="font-semibold">{result}</span> <a href="/bookings" className="underline ml-2">Book Ayush Homam</a></span>
       )}
-      {error && <span className="text-destructive ml-2">{error}</span>}
+      {error && <span className="text-destructive ml-2">{error.includes('rate limit') || error.includes('429') ? 'Rate limited, please try again in a minute.' : error}</span>}
     </div>
   );
 }
