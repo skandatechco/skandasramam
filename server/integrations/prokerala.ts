@@ -1,7 +1,9 @@
 import "dotenv/config";
 
 const BASE_URL = process.env.PROKERALA_BASE_URL?.replace(/\/$/, "") || "https://api.prokerala.com/astrology";
-const TOKEN = process.env.PROKERALA_API_TOKEN || process.env.PROKERALA_TOKEN || "";
+function getToken() {
+  return process.env.PROKERALA_API_TOKEN || process.env.PROKERALA_TOKEN || "";
+}
 
 export interface PanchangResult {
   date: string;
@@ -23,7 +25,7 @@ export async function getPanchang({ date, latitude, longitude, timezone }: { dat
   url.searchParams.set("timezone", timezone);
 
   const res = await fetch(url.toString(), {
-    headers: { Authorization: `Bearer ${TOKEN}` },
+    headers: { Authorization: `Bearer ${getToken()}` },
   });
   if (!res.ok) {
     const text = await res.text();
@@ -71,7 +73,7 @@ function normalize(s: string) {
 }
 
 function ensureToken() {
-  if (!TOKEN) {
+  if (!getToken()) {
     throw new Error("Missing PROKERALA_API_TOKEN. Set it in your environment (Vercel/Netlify env vars).");
   }
 }
