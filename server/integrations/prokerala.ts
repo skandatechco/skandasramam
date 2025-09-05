@@ -76,10 +76,10 @@ export async function getPanchang({ date, latitude, longitude, timezone }: { dat
 
   // Normalize fields defensively
   const d = data?.data || data;
-  const tithi = d?.tithi || null;
-  const nakshatra = d?.nakshatra || null;
-  const yoga = d?.yoga || null;
-  const karana = d?.karana || null;
+  const tithi = toNamed(d?.tithi);
+  const nakshatra = toNamed(d?.nakshatra);
+  const yoga = toNamed(d?.yoga);
+  const karana = toNamed(d?.karana);
   const sunrise = d?.sunrise;
   const sunset = d?.sunset;
 
@@ -95,7 +95,7 @@ export async function findNextNakshatra({ targetNakshatra, startDate, latitude, 
     const dateStr = d.toISOString().slice(0, 10);
     try {
       const p = await getPanchang({ date: dateStr, latitude, longitude, timezone });
-      const name: string | undefined = (p.nakshatra as any)?.name || (p.nakshatra as any)?.nakshatra || (p.raw?.nakshatra?.name);
+      const name: string | undefined = (p.nakshatra as any)?.name;
       if (name && equalsNakshatra(name, targetNakshatra)) {
         return { date: dateStr, name };
       }
@@ -147,4 +147,10 @@ function ensureToken() {
   if (!getStaticToken() && (!CLIENT_ID || !CLIENT_SECRET)) {
     throw new Error("Missing Prokerala credentials. Set PROKERALA_API_TOKEN or PROKERALA_CLIENT_ID/PROKERALA_CLIENT_SECRET in env.");
   }
+}
+
+function toNamed(x: any): { name: string } | null {
+  if (!x) return null;
+  const name = x.name || x?.details?.name || x?.details?.tithi?.name || x?.details?.nakshatra?.name || x?.details?.yoga?.name || x?.details?.karana?.name || x?.tithi?.name || x?.nakshatra?.name || x?.yoga?.name || x?.karana?.name;
+  return name ? { name } : null;
 }
