@@ -1,6 +1,7 @@
 import { BadgeCheck, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
+import { BadgeCheck, Clock } from "lucide-react";
 
 type Item = {
   title: string;
