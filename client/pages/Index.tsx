@@ -33,6 +33,95 @@ function Feature({
   );
 }
 
+function useChennaiDefaults() {
+  return useMemo(() => ({ lat: 13.0827, lon: 80.2707, tz: "Asia/Kolkata" }), []);
+}
+
+function PanchangStrip() {
+  const { lat, lon, tz } = useChennaiDefaults();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<any | null>(null);
+
+  useEffect(() => {
+    const date = new Date().toISOString().slice(0, 10);
+    setLoading(true);
+    fetch(`/api/panchangam/today?date=${date}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`)
+      .then(async (r) => {
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
+        return j.data;
+      })
+      .then((d) => setData(d))
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, [lat, lon, tz]);
+
+  if (loading) return <div className="text-sm text-muted-foreground">Loading today’s panchangam…</div>;
+  if (error) return <div className="text-sm text-destructive">{error}</div>;
+  const tithi = data?.tithi?.name || "—";
+  const nakshatra = data?.nakshatra?.name || "—";
+  const yoga = data?.yoga?.name || "—";
+  const karana = data?.karana?.name || "—";
+
+  return (
+    <div className="flex flex-wrap items-center gap-3 text-sm">
+      <span className="font-semibold">Today’s Panchangam</span>
+      <span className="text-muted-foreground">Tithi: {tithi}</span>
+      <span className="text-muted-foreground">Nakshatra: {nakshatra}</span>
+      <span className="text-muted-foreground">Yoga: {yoga}</span>
+      <span className="text-muted-foreground">Karana: {karana}</span>
+    </div>
+  );
+}
+
+const NAKSHATRAS = [
+  "Ashwini","Bharani","Krittika","Rohini","Mrigashirsha","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"
+];
+
+function NakshatraFinder() {
+  const { lat, lon, tz } = useChennaiDefaults();
+  const [n, setN] = useState(NAKSHATRAS[0]);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const onFind = async () => {
+    setLoading(true);
+    setResult(null);
+    setError(null);
+    try {
+      const start = new Date().toISOString().slice(0, 10);
+      const r = await fetch(`/api/nakshatra/next?n=${encodeURIComponent(n)}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&start=${start}`);
+      const j = await r.json();
+      if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
+      setResult(j.data?.date);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-wrap items-center gap-2 text-sm">
+      <label className="text-muted-foreground">Next Nakshatra:</label>
+      <select value={n} onChange={(e) => setN(e.target.value)} className="px-2 py-1 rounded-md border bg-background">
+        {NAKSHATRAS.map((x) => (
+          <option key={x} value={x}>{x}</option>
+        ))}
+      </select>
+      <button onClick={onFind} disabled={loading} className="inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium text-white" style={{ background: "linear-gradient(90deg,#2F6C8A,#5A8F5F)" }}>
+        {loading ? "Finding…" : "Find Date"}
+      </button>
+      {result && (
+        <span className="ml-2">Next {n}: <span className="font-semibold">{result}</span> <a href="/bookings" className="underline ml-2">Book Ayush Homam</a></span>
+      )}
+      {error && <span className="text-destructive ml-2">{error}</span>}
+    </div>
+  );
+}
+
 export default function Index() {
   return (
     <main>
