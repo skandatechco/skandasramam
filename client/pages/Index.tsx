@@ -48,9 +48,15 @@ function PanchangStrip() {
     setLoading(true);
     fetch(`/api/panchangam/today?date=${date}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`)
       .then(async (r) => {
-        const j = await r.json();
-        if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
-        return j.data;
+        const clone = r.clone();
+        try {
+          const j = await r.json();
+          if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
+          return j.data;
+        } catch {
+          const raw = await clone.text();
+          throw new Error(raw || `Status ${r.status}`);
+        }
       })
       .then((d) => setData(d))
       .catch((e) => setError(e.message))
@@ -59,10 +65,10 @@ function PanchangStrip() {
 
   if (loading) return <div className="text-sm text-muted-foreground">Loading today’s panchangam…</div>;
   if (error) return <div className="text-sm text-destructive">{error}</div>;
-  const tithi = data?.tithi?.name || "—";
-  const nakshatra = data?.nakshatra?.name || "—";
-  const yoga = data?.yoga?.name || "—";
-  const karana = data?.karana?.name || "—";
+  const tithi = data?.tithi?.name ?? data?.tithi ?? "—";
+  const nakshatra = data?.nakshatra?.name ?? data?.nakshatra ?? "—";
+  const yoga = data?.yoga?.name ?? data?.yoga ?? "—";
+  const karana = data?.karana?.name ?? data?.karana ?? "—";
 
   return (
     <div className="flex flex-wrap items-center gap-3 text-sm">
@@ -93,11 +99,15 @@ function NakshatraFinder() {
     try {
       const start = new Date().toISOString().slice(0, 10);
       const r = await fetch(`/api/nakshatra/next?n=${encodeURIComponent(n)}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&start=${start}`);
-      const raw = await r.text();
-      let j: any = {};
-      try { j = JSON.parse(raw); } catch { j = { ok: false, error: raw || `Status ${r.status}` }; }
-      if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
-      setResult(j.data?.date);
+      const clone = r.clone();
+      try {
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j?.error || `Status ${r.status}`);
+        setResult(j.data?.date);
+      } catch {
+        const raw = await clone.text();
+        throw new Error(raw || `Status ${r.status}`);
+      }
     } catch (e: any) {
       setError(e.message);
     } finally {
