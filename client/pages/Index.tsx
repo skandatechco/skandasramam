@@ -91,8 +91,9 @@ function NakshatraFinder() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [cooldown, setCooldown] = useState(0);
 
-  const onFind = async () => {
+   const onFind = async () => {
     setLoading(true);
     setResult(null);
     setError(null);
