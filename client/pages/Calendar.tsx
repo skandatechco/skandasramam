@@ -228,44 +228,27 @@ export default function Calendar() {
             </div>
           )}
 
-          <div className="mt-2 grid sm:grid-cols-2 gap-3">
-            <Button asChild>
-              <NavLink to="/poojas/regular">Book Regular Pooja</NavLink>
-            </Button>
-            <Button asChild variant="outline">
-              <NavLink to="/poojas/special">Book One-time Pooja</NavLink>
-            </Button>
+          <div className="mt-4">
+            <h2 className="text-base font-semibold">Events for {format(selected, "PPP")}</h2>
+            {loading ? (
+              <p className="mt-2 text-sm text-muted-foreground">Loading…</p>
+            ) : events.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">No special events today.</p>
+            ) : (
+              <div className="mt-3 grid gap-3">
+                {events.map((e, i) => (
+                  <div key={i} className="rounded-lg border p-4 bg-background">
+                    <h3 className="font-medium">{e.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{e.details}</p>
+                    {e.time && (
+                      <p className="text-sm text-muted-foreground mt-2">Time: {e.time}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-      </div>
-
-      <div className="mt-8 rounded-xl border bg-card p-6">
-        <h2 className="text-lg font-semibold">Events for {format(selected, "PPP")}</h2>
-        {loading ? (
-          <p className="mt-2 text-sm text-muted-foreground">Loading…</p>
-        ) : events.length === 0 ? (
-          <p className="mt-2 text-sm text-muted-foreground">No special events today.</p>
-        ) : (
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {events.map((e, i) => (
-              <div key={i} className="rounded-lg border p-4 bg-background">
-                <h3 className="font-medium">{e.title}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{e.details}</p>
-                {e.time && (
-                  <p className="text-sm text-muted-foreground mt-2">Time: {e.time}</p>
-                )}
-                <div className="mt-3 flex gap-2">
-                  <Button asChild size="sm">
-                    <NavLink to="/poojas/regular">Book Regular</NavLink>
-                  </Button>
-                  <Button asChild size="sm" variant="outline">
-                    <NavLink to="/poojas/special">Book One-time</NavLink>
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </section>
   );
