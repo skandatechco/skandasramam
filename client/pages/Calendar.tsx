@@ -113,6 +113,7 @@ export default function Calendar() {
   const [dataTa, setDataTa] = useState<any | null>(null);
   const [dataEn, setDataEn] = useState<any | null>(null);
   const [eventDates, setEventDates] = useState<string[]>([]);
+  const [eventsByDate, setEventsByDate] = useState<Record<string, { title: string; details: string; time?: string }[]>>({});
   const [monthComplete, setMonthComplete] = useState(false);
 
   const dateStr = format(selected, "yyyy-MM-dd");
