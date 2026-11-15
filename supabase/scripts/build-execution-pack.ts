@@ -66,10 +66,10 @@ function verify(step: string, migrations: number, extra = ""): string {
     `(select count(*) from public.pooja_days) = 7 as pooja_days_7_rows_ok`,
     `(select md5(string_agg(t::text, '|' order by date)) from public.pooja_days t) as data_md5`,
     `(select relrowsecurity from pg_class where oid = 'public.pooja_days'::regclass) as pooja_days_rls_on_ok`,
-    `(select coalesce(string_agg(distinct privilege_type, ',' order by privilege_type), '')
-       from information_schema.role_table_grants
-      where table_schema = 'public' and table_name = 'pooja_days'
-        and grantee in ('anon', 'authenticated')) = 'SELECT' as pooja_days_public_read_only_ok`,
+    `(select coalesce(string_agg(distinct a.privilege_type, ',' order by a.privilege_type), '')
+       from pg_class c, aclexplode(c.relacl) a
+      where c.oid = 'public.pooja_days'::regclass
+        and a.grantee in (select oid from pg_roles where rolname in ('anon', 'authenticated'))) = 'SELECT' as pooja_days_public_read_only_ok`,
     `has_table_privilege('service_role', 'public.pooja_days', 'INSERT')
       and has_table_privilege('service_role', 'public.pooja_days', 'UPDATE') as service_role_can_still_write_ok`,
   ];
@@ -149,7 +149,7 @@ export function buildPack(): Record<string, string> {
       "Changes ONLY grants and the RLS flag on public.pooja_days. No row is touched.",
       "The service role (the trusted server-side updater) bypasses RLS and keeps its privileges.",
       "Reverse (only if needed): alter table public.pooja_days disable row level security;",
-      "  drop policy \"pooja_days: public read\" on public.pooja_days;  then re-grant what step 0 showed.",
+      "  drop policy \"pooja_days: public read\" on public.pooja_days;  then: grant all on public.pooja_days to anon, authenticated;  (restores the original ACL).",
     ]) + read("optional", "harden_pooja_days.sql").replace(/^--[\s\S]*?\n(?=begin;)/, "");
 
   pack["B1_anon_can_read.sql"] =

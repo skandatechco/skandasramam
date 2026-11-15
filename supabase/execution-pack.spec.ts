@@ -18,7 +18,9 @@ const db = new PGlite();
 async function run(name: string) {
   const res = await db.exec(file(name));
   const withRows = res.filter((r) => r.rows.length);
-  return withRows[withRows.length - 1]?.rows[0] as Record<string, any> | undefined;
+  return withRows[withRows.length - 1]?.rows[0] as
+    | Record<string, any>
+    | undefined;
 }
 async function mustFail(name: string, re: RegExp) {
   let err: any;
@@ -34,7 +36,9 @@ async function mustFail(name: string, re: RegExp) {
   expect(String(err.message)).toMatch(re);
 }
 const allOk = (row: Record<string, any>) =>
-  Object.entries(row).filter(([k]) => k.endsWith("_ok") && row[k] !== true).map(([k]) => k);
+  Object.entries(row)
+    .filter(([k]) => k.endsWith("_ok") && row[k] !== true)
+    .map(([k]) => k);
 
 let md5: string;
 
@@ -62,7 +66,8 @@ describe("the execution pack", () => {
   it("is exactly what the generator produces from the current migrations and seed (no drift)", () => {
     const pack = buildPack();
     expect(readdirSync(dir).sort()).toEqual(Object.keys(pack).sort());
-    for (const [name, sql] of Object.entries(pack)) expect([name, file(name)]).toEqual([name, sql]);
+    for (const [name, sql] of Object.entries(pack))
+      expect([name, file(name)]).toEqual([name, sql]);
   });
 
   it("step 0 records the fingerprint of the existing table", async () => {
@@ -80,15 +85,51 @@ describe("the execution pack", () => {
 
   it("the hardening verification FAILS before step A (so a skipped step cannot pass unnoticed)", async () => {
     const r = (await run("B5_verify_hardening.sql"))!;
-    expect(allOk(r)).toEqual(expect.arrayContaining(["pooja_days_rls_on_ok", "pooja_days_public_read_only_ok"]));
+    expect(allOk(r)).toEqual(
+      expect.arrayContaining([
+        "pooja_days_rls_on_ok",
+        "pooja_days_public_read_only_ok",
+      ]),
+    );
   });
 
   it("step A + B: public read works, public and signed-in writes are denied, the service role is not blocked", async () => {
+    const acl = async () =>
+      (
+        await db.query<any>(
+          "select relacl::text a from pg_class where oid = 'public.pooja_days'::regclass",
+        )
+      ).rows[0].a;
+    // the real project's ACL: every API role holds ALL privileges (arwdDxtm on Postgres 17)
+    const aclBefore = await acl();
+    expect(aclBefore).toMatch(/anon=[a-zA-Z]*r[a-zA-Z]*d[a-zA-Z]*[/]postgres/);
+    expect(aclBefore).toMatch(
+      /authenticated=[a-zA-Z]*r[a-zA-Z]*d[a-zA-Z]*[/]postgres/,
+    );
     await db.exec(file("A_apply_pooja_days_hardening.sql"));
+    const aclAfter = await acl();
+    // exactly SELECT for the public roles: no write, no truncate, no references/trigger/maintain left behind
+    expect(aclAfter).toContain("anon=r/postgres");
+    expect(aclAfter).toContain("authenticated=r/postgres");
+    // the service role (server-side updater) and the owner keep everything they had
+    expect(aclAfter).toContain(
+      aclBefore.match(/service_role=[a-zA-Z]+[/]postgres/)![0],
+    );
+    expect(aclAfter).toContain(
+      aclBefore.match(/(?<=[{,])postgres=[a-zA-Z]+[/]postgres/)![0],
+    );
     expect((await run("B1_anon_can_read.sql"))!.rows_visible_to_anon).toBe(7);
-    await mustFail("B2_anon_cannot_write.sql", /permission denied for table pooja_days/);
-    await mustFail("B3_authenticated_cannot_write.sql", /permission denied for table pooja_days/);
-    expect((await run("B4_service_role_can_write.sql"))!.result).toBe("service role can still write");
+    await mustFail(
+      "B2_anon_cannot_write.sql",
+      /permission denied for table pooja_days/,
+    );
+    await mustFail(
+      "B3_authenticated_cannot_write.sql",
+      /permission denied for table pooja_days/,
+    );
+    expect((await run("B4_service_role_can_write.sql"))!.result).toBe(
+      "service role can still write",
+    );
     const r = (await run("B5_verify_hardening.sql"))!;
     expect(allOk(r)).toEqual([]);
     expect(r.data_md5).toBe(md5);
@@ -115,7 +156,9 @@ describe("the execution pack", () => {
     const r = (await run("N_final_verification.sql"))!;
     expect(allOk(r)).toEqual([]);
     expect(r.data_md5).toBe(md5);
-    expect(Object.keys(r).filter((k) => k.endsWith("_ok")).length).toBeGreaterThanOrEqual(24);
+    expect(
+      Object.keys(r).filter((k) => k.endsWith("_ok")).length,
+    ).toBeGreaterThanOrEqual(24);
   });
 
   it("re-running the seed changes nothing (still all checks passing)", async () => {
@@ -124,8 +167,12 @@ describe("the execution pack", () => {
   });
 
   it("the final verification FAILS if a Panchangam rule is enabled or a price is missing", async () => {
-    await db.exec("update public.panchangam_pooja_rules set active = true where id = (select id from public.panchangam_pooja_rules limit 1)");
-    expect(allOk((await run("N_final_verification.sql"))!)).toContain("panchangam_rules_all_disabled_ok");
+    await db.exec(
+      "update public.panchangam_pooja_rules set active = true where id = (select id from public.panchangam_pooja_rules limit 1)",
+    );
+    expect(allOk((await run("N_final_verification.sql"))!)).toContain(
+      "panchangam_rules_all_disabled_ok",
+    );
     await db.exec("update public.panchangam_pooja_rules set active = false");
     expect(allOk((await run("N_final_verification.sql"))!)).toEqual([]);
   });
