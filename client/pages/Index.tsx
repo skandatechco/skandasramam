@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CalendarDays, BookMarked, Download, Mic } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { HomeCalendar } from "@/components/calendar/HomeCalendar";
 import { useEffect, useMemo, useState } from "react";
 
 function Feature({
@@ -255,6 +256,9 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Temple calendar (immediately below the hero) */}
+      <HomeCalendar />
 
       {/* Panchangam strip */}
       <section className="bg-background/80 border-t border-b">

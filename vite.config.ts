@@ -16,6 +16,8 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: "dist/spa",
   },
+  // Vitest: PGlite start-up is slow when several database suites run at once.
+  ...({ test: { hookTimeout: 90_000, testTimeout: 30_000 } } as {}),
   plugins: [react(), expressPlugin()],
   resolve: {
     alias: {

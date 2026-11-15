@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { NavLink, useParams } from "react-router-dom";
+import { BookingForm } from "@/components/booking/BookingForm";
 
 function slugify(s: string) {
   return s
@@ -15,9 +13,16 @@ type Detail = {
   title: string;
   benefits: string[];
   image?: string;
+  /**
+   * Used when the temple has not published benefits for this pooja: shows only
+   * the temple's own listing text (from the Regular Poojas page). Nothing else is
+   * invented.
+   */
+  about?: string;
+  time?: string;
 };
 
-const DETAILS: Detail[] = [
+export const DETAILS: Detail[] = [
   {
     title: "Sankata Hara Chaturthi",
     benefits: [
@@ -106,6 +111,20 @@ const DETAILS: Detail[] = [
       "Patience, discipline, and steady progress.",
     ],
   },
+  // The two entries below use ONLY the temple's own listing text (Regular Poojas
+  // page). The temple has not supplied benefits for them, so none are shown.
+  {
+    title: "Prathiyankara Sarabha Sulini Homam",
+    benefits: [],
+    about: "Daily homam for protection and blessings.",
+    time: "9:15 AM – 11:00 AM",
+  },
+  {
+    title: "Navavarna Pooja",
+    benefits: [],
+    about:
+      "Performed on Panchami, Ashtami, Chaturdasi, New Moon, and Full Moon.",
+  },
 ];
 
 function getDetailBySlug(slug: string | undefined): Detail | undefined {
@@ -153,7 +172,7 @@ export default function RegularPoojaDetail() {
         <div className="md:col-span-1">
           <div className="aspect-[4/5] w-full overflow-hidden rounded-xl border bg-muted">
             <img
-              src={detail.image || "/public/placeholder.svg"}
+              src={detail.image || "/placeholder.svg"}
               alt={detail.title}
               className="h-full w-full object-cover"
             />
@@ -161,72 +180,30 @@ export default function RegularPoojaDetail() {
         </div>
 
         <div className="md:col-span-1">
-          <h2 className="text-xl font-semibold">Benefits</h2>
-          <ul className="mt-3 space-y-2 list-disc pl-5 text-sm">
-            {detail.benefits.map((b, i) => (
-              <li key={i}>{b}</li>
-            ))}
-          </ul>
+          {detail.benefits.length > 0 ? (
+            <>
+              <h2 className="text-xl font-semibold">Benefits</h2>
+              <ul className="mt-3 space-y-2 list-disc pl-5 text-sm">
+                {detail.benefits.map((b, i) => (
+                  <li key={i}>{b}</li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <>
+              <h2 className="text-xl font-semibold">About this pooja</h2>
+              {detail.about && <p className="mt-3 text-sm">{detail.about}</p>}
+              {detail.time && (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Time: {detail.time}
+                </p>
+              )}
+            </>
+          )}
         </div>
 
         <div className="md:col-span-1" id="form">
-          <div className="rounded-xl border p-6">
-            <h2 className="text-lg font-semibold">Booking Request</h2>
-            <form
-              className="mt-4 grid gap-3"
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Submitted. We will contact you shortly.");
-              }}
-            >
-              <div>
-                <Label htmlFor="name">Full Name</Label>
-                <Input id="name" name="name" required />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" required />
-                </div>
-                <div>
-                  <Label htmlFor="phone">Phone</Label>
-                  <Input id="phone" name="phone" type="tel" required />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label htmlFor="nakshatra">Nakshatra</Label>
-                  <Input id="nakshatra" name="nakshatra" />
-                </div>
-                <div>
-                  <Label htmlFor="gotra">Gotra</Label>
-                  <Input id="gotra" name="gotra" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label htmlFor="date">Preferred Date</Label>
-                  <Input id="date" name="date" type="date" />
-                </div>
-                <div>
-                  <Label htmlFor="time">Preferred Time</Label>
-                  <Input id="time" name="time" type="time" />
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="intent">Intent / Sankalpam</Label>
-                <Textarea
-                  id="intent"
-                  name="intent"
-                  rows={4}
-                  placeholder="Describe your intent or sankalpam"
-                />
-              </div>
-              <Button type="submit" className="mt-2">
-                Book Pooja
-              </Button>
-            </form>
-          </div>
+          <BookingForm poojaTitle={detail.title} />
         </div>
       </div>
     </main>

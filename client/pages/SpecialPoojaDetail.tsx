@@ -1,4 +1,5 @@
 import { useParams, NavLink } from "react-router-dom";
+import { BookingForm } from "@/components/booking/BookingForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,7 +19,7 @@ type Detail = {
   donate?: boolean;
 };
 
-const DETAILS: Detail[] = [
+export const DETAILS: Detail[] = [
   {
     title: "Lord Kamala Siddhi Vinayaka, Panchamukha Heramba Ganapathy",
     benefits: [
@@ -213,7 +214,7 @@ export default function SpecialPoojaDetail() {
         <div className="md:col-span-1">
           <div className="aspect-[4/5] w-full overflow-hidden rounded-xl border bg-muted">
             <img
-              src={detail.image || "/public/placeholder.svg"}
+              src={detail.image || "/placeholder.svg"}
               alt={detail.title}
               className="h-full w-full object-cover"
             />
@@ -232,65 +233,69 @@ export default function SpecialPoojaDetail() {
 
         {/* Intake form */}
         <div className="md:col-span-1" id="form">
-          <div className="rounded-xl border p-6">
-            <h2 className="text-lg font-semibold">
-              {detail.donate ? "Donation" : "Booking"} Request
-            </h2>
-            <form
-              className="mt-4 grid gap-3"
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Submitted. We will contact you shortly.");
-              }}
-            >
-              <div>
-                <Label htmlFor="name">Full Name</Label>
-                <Input id="name" name="name" required />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
+          {detail.donate ? (
+            <div className="rounded-xl border p-6">
+              <h2 className="text-lg font-semibold">
+                {detail.donate ? "Donation" : "Booking"} Request
+              </h2>
+              <form
+                className="mt-4 grid gap-3"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  alert("Submitted. We will contact you shortly.");
+                }}
+              >
                 <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" required />
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input id="name" name="name" required />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" name="email" type="email" required />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input id="phone" name="phone" type="tel" required />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label htmlFor="nakshatra">Nakshatra</Label>
+                    <Input id="nakshatra" name="nakshatra" />
+                  </div>
+                  <div>
+                    <Label htmlFor="gotra">Gotra</Label>
+                    <Input id="gotra" name="gotra" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label htmlFor="date">Preferred Date</Label>
+                    <Input id="date" name="date" type="date" />
+                  </div>
+                  <div>
+                    <Label htmlFor="time">Preferred Time</Label>
+                    <Input id="time" name="time" type="time" />
+                  </div>
                 </div>
                 <div>
-                  <Label htmlFor="phone">Phone</Label>
-                  <Input id="phone" name="phone" type="tel" required />
+                  <Label htmlFor="intent">Intent / Sankalpam</Label>
+                  <Textarea
+                    id="intent"
+                    name="intent"
+                    rows={4}
+                    placeholder="Describe your intent or sankalpam"
+                  />
                 </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label htmlFor="nakshatra">Nakshatra</Label>
-                  <Input id="nakshatra" name="nakshatra" />
-                </div>
-                <div>
-                  <Label htmlFor="gotra">Gotra</Label>
-                  <Input id="gotra" name="gotra" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label htmlFor="date">Preferred Date</Label>
-                  <Input id="date" name="date" type="date" />
-                </div>
-                <div>
-                  <Label htmlFor="time">Preferred Time</Label>
-                  <Input id="time" name="time" type="time" />
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="intent">Intent / Sankalpam</Label>
-                <Textarea
-                  id="intent"
-                  name="intent"
-                  rows={4}
-                  placeholder="Describe your intent or sankalpam"
-                />
-              </div>
-              <Button type="submit" className="mt-2">
-                {detail.donate ? "Proceed to Donate" : "Book Pooja"}
-              </Button>
-            </form>
-          </div>
+                <Button type="submit" className="mt-2">
+                  {detail.donate ? "Proceed to Donate" : "Book Pooja"}
+                </Button>
+              </form>
+            </div>
+          ) : (
+            <BookingForm poojaTitle={detail.title} />
+          )}
         </div>
       </div>
     </main>

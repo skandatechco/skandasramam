@@ -25,6 +25,11 @@ const nextNakshatraProgress = new Map<
   { lastIndex: number; updatedAt: number }
 >();
 
+/** True when Prokerala credentials are present (no network call is made). */
+export function isProkeralaConfigured(): boolean {
+  return Boolean(getStaticToken() || (CLIENT_ID && CLIENT_SECRET));
+}
+
 function getStaticToken() {
   return process.env.PROKERALA_API_TOKEN || process.env.PROKERALA_TOKEN || "";
 }

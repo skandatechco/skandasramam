@@ -1,8 +1,19 @@
 import "dotenv/config";
-import express from "express";
+import express, { type RequestHandler } from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { getPanchang, findNextNakshatra } from "./integrations/prokerala";
+import { rateLimit } from "./lib/rateLimit";
+import { getTempleCalendar } from "./routes/calendar";
+import { getFestival } from "./routes/festivals";
+import { requireAdmin } from "./lib/adminAuth";
+import * as admin from "./routes/admin";
+import {
+  createBooking,
+  getBooking,
+  listPoojas,
+  submitPayment,
+} from "./routes/bookings";
 
 // In-memory month cache for highlighted events (rate-limit aware)
 const monthCache = new Map<
@@ -107,12 +118,14 @@ function deriveRegularEventsFromPanchang(en: any) {
   );
 }
 
-export function createServer() {
+export function createServer(opts: { rateLimiting?: boolean } = {}) {
   const app = express();
+  // Behind Vercel's proxy: use the real client IP (for rate limiting).
+  app.set("trust proxy", 1);
 
   // Middleware
   app.use(cors());
-  app.use(express.json());
+  app.use(express.json({ limit: "20kb" }));
   app.use(express.urlencoded({ extended: true }));
 
   // Example API routes
@@ -122,6 +135,61 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Booking API (Supabase-backed; service-role key stays on the server)
+  const limiting = opts.rateLimiting !== false; // always on unless a test turns it off
+  const passthrough: RequestHandler = (_req, _res, next) => next();
+  const publicLimiter = limiting
+    ? rateLimit({ windowMs: 60_000, max: 60 })
+    : passthrough;
+  const writeLimiter = limiting
+    ? rateLimit({ windowMs: 15 * 60_000, max: 20 })
+    : passthrough;
+  // Booking responses are per-devotee and must never be cached by browsers/CDNs.
+  app.use("/api/bookings", (_req, res, next) => {
+    res.setHeader("Cache-Control", "no-store");
+    next();
+  });
+  // ---- Administration API ----------------------------------------------------
+  // Every /api/admin request: no-store, rate limited, JWT verified by Supabase
+  // Auth and is_admin() checked (see lib/adminAuth). No service-role key is used.
+  const adminLimiter = limiting
+    ? rateLimit({ windowMs: 60_000, max: 240 })
+    : passthrough;
+  const adminApi = express.Router();
+  adminApi.use((_req, res, next) => {
+    res.setHeader("Cache-Control", "no-store");
+    next();
+  });
+  adminApi.use(adminLimiter, requireAdmin);
+  adminApi.get("/me", admin.getMe);
+  adminApi.get("/stats", admin.getStats);
+  adminApi.get("/bookings", admin.listBookings);
+  adminApi.get("/bookings/:id", admin.getBookingDetail);
+  adminApi.post("/bookings/:id/actions", admin.performBookingAction);
+  adminApi.get("/poojas", admin.listPoojasAdmin);
+  adminApi.post("/poojas/:id/price", admin.setPoojaPrice);
+  adminApi.get("/poojas/:id/price-history", admin.getPriceHistory);
+  adminApi.get("/panchangam-rules", admin.listPanchangamRules);
+  adminApi.patch("/panchangam-rules/:id", admin.patchPanchangamRule);
+  adminApi.get("/schedule-audit", admin.getScheduleAudit);
+  adminApi.get("/recurring-schedules", admin.listRecurring);
+  adminApi.patch("/recurring-schedules/:id", admin.patchRecurring);
+  adminApi.get("/festivals", admin.listFestivals);
+  adminApi.post("/festivals", admin.createFestival);
+  adminApi.patch("/festivals/:id", admin.patchFestival);
+  adminApi.get("/festivals/:id/history", admin.getFestivalHistory);
+  adminApi.get("/special-schedules", admin.listSpecial);
+  adminApi.post("/special-schedules", admin.createSpecial);
+  adminApi.patch("/special-schedules/:id", admin.patchSpecial);
+  app.use("/api/admin", adminApi);
+
+  app.get("/api/poojas", publicLimiter, listPoojas);
+  app.get("/api/temple-calendar", publicLimiter, getTempleCalendar);
+  app.get("/api/festivals/:slug", publicLimiter, getFestival);
+  app.post("/api/bookings", writeLimiter, createBooking);
+  app.get("/api/bookings/:orderNo", writeLimiter, getBooking);
+  app.post("/api/bookings/:orderNo/payment", writeLimiter, submitPayment);
 
   // Panchangam for any date
   app.get("/api/panchangam", async (req, res) => {
@@ -261,12 +329,10 @@ export function createServer() {
         eventsByDate: entry.eventsByDate,
       });
     } catch (e: any) {
-      res
-        .status(500)
-        .json({
-          ok: false,
-          error: e?.message || "Failed to build month events",
-        });
+      res.status(500).json({
+        ok: false,
+        error: e?.message || "Failed to build month events",
+      });
     }
   });
 
@@ -305,6 +371,35 @@ export function createServer() {
       });
     }
   });
+
+  // Last-resort error handler: log the message server-side only (no request
+  // bodies / PII) and never leak internals to the client.
+  app.use(
+    (
+      err: any,
+      _req: express.Request,
+      res: express.Response,
+      next: express.NextFunction,
+    ) => {
+      if (res.headersSent) return next(err);
+      if (
+        err?.type === "entity.parse.failed" ||
+        err?.type === "entity.too.large"
+      ) {
+        return res.status(400).json({
+          ok: false,
+          code: "BAD_REQUEST",
+          error: "Invalid request body.",
+        });
+      }
+      console.error("[api] unhandled error:", err?.message || err);
+      res.status(500).json({
+        ok: false,
+        code: "SERVER_ERROR",
+        error: "Something went wrong. Please try again.",
+      });
+    },
+  );
 
   return app;
 }
