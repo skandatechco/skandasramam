@@ -24,6 +24,9 @@
 --   * never adds a second schedule to a pooja that already has one.
 --   The rates are recorded in the price audit log as "system" with the reason below.
 --
+-- PANCHANGAM POOJAS ARE HELD: their schedule rules are inserted disabled (see below), so none of
+-- them is shown or bookable until an administrator enables the rule after verifying the dates.
+--
 -- Poojas that are NOT here on purpose:
 --   Annadanam / Daily Annadhanam   donation flow, not a fixed-amount pooja booking
 --                                   (no price, no booking link).
@@ -145,8 +148,13 @@ with r (slug, tithis, paksha, nakshatras, start_time) as (values
   -- Listing: "Performed on Panchami, Ashtami, Chaturdasi, New Moon, and Full Moon." (no time printed)
   ('navavarna-pooja',              array['panchami','ashtami','chaturdashi','amavasya','purnima'], null, null, null)
 )
-insert into public.panchangam_pooja_rules (pooja_id, tithis, paksha, nakshatras, start_time)
-select p.id, r.tithis, r.paksha, r.nakshatras, r.start_time
+-- HELD: every Panchangam rule is inserted DISABLED (active = false). Their dates depend on the
+-- time of day (Pradosham at sunset, Sankata Hara Chaturthi at moonrise, nakshatras that span two
+-- dates) and have not been verified against pooja_days, so no Panchangam pooja appears on the
+-- calendar or can be booked until an administrator enables its rule
+-- (Admin > Poojas & schedules > Panchangam rules; audited). See docs/launch/PANCHANGAM_RELIABILITY.md.
+insert into public.panchangam_pooja_rules (pooja_id, tithis, paksha, nakshatras, start_time, active)
+select p.id, r.tithis, r.paksha, r.nakshatras, r.start_time, false
   from r
   join public.poojas p on p.slug = r.slug
  where not exists (select 1 from public.panchangam_pooja_rules x where x.pooja_id = p.id);

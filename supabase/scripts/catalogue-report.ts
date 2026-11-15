@@ -36,6 +36,8 @@ async function main() {
     from public.poojas p order by (p.type = 'special'), p.type, p.name`)
   ).rows;
 
+  const held = (r: any) =>
+    r.pan ? " (HELD: disabled until the dates are verified)" : "";
   const sched = (r: any) =>
     r.rec
       ? `daily, ${r.rec.split(" ")[0].slice(0, 5)}`
@@ -44,7 +46,7 @@ async function main() {
         : "no dates entered yet (temple to schedule)";
   const lines = rows.map(
     (r) =>
-      `| ${r.name} | \`${r.slug}\` | ${r.type} | ₹${r.amt} | ${sched(r)} | ${resolveDestination(r.slug) ?? "NONE"} |`,
+      `| ${r.name} | \`${r.slug}\` | ${r.type} | ₹${r.amt} | ${sched(r)}${held(r)} | ${resolveDestination(r.slug) ?? "NONE"} |`,
   );
   const by = (t: string) => rows.filter((r) => r.type === t).length;
   const md = `# Catalogue verification report

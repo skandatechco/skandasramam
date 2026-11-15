@@ -389,3 +389,68 @@ describe("re-running the seed on a catalogue that already has data", () => {
     expect(dup).toBe(0);
   });
 });
+
+describe("Panchangam-sensitive poojas are held until verified", () => {
+  it("every Panchangam rule is seeded disabled, so none is shown or bookable", async () => {
+    const r = (
+      await q(
+        "select count(*)::int n, count(*) filter (where active)::int a from public.panchangam_pooja_rules",
+      )
+    ).rows[0];
+    expect(r).toEqual({ n: 11, a: 0 });
+    // the public (what the calendar and booking read) sees no Panchangam rule at all
+    const anon = await t.as("anon", null, () =>
+      q("select count(*)::int n from public.panchangam_pooja_rules"),
+    );
+    expect(anon.rows[0].n).toBe(0);
+  });
+
+  it("the price is already set, so enabling the rule is the only step left", async () => {
+    const r = (
+      await q(
+        `select count(*)::int n from public.poojas p
+          where p.type = 'panchangam' and p.amount_inr is not null`,
+      )
+    ).rows[0];
+    expect(r.n).toBe(11);
+  });
+
+  it("an administrator enables one after verification, audited, and only then it is visible", async () => {
+    const { id } = (
+      await q(
+        `select r.id from public.panchangam_pooja_rules r join public.poojas p on p.id = r.pooja_id
+          where p.slug = 'pradosham'`,
+      )
+    ).rows[0];
+    await t.as("authenticated", ADMIN, () =>
+      q(
+        "select * from public.admin_schedule_rule_set_active('panchangam', $1, true, null, 'Dates verified with the temple')",
+        [id],
+      ),
+    );
+    const visible = await t.as("anon", null, () =>
+      q("select count(*)::int n from public.panchangam_pooja_rules"),
+    );
+    expect(visible.rows[0].n).toBe(1);
+    const log = (
+      await q(
+        "select admin_id, reason, (new_values->>'active') a from public.schedule_audit_log where record_id = $1 and action = 'update'",
+        [id],
+      )
+    ).rows;
+    expect(log).toEqual([
+      { admin_id: ADMIN, reason: "Dates verified with the temple", a: "true" },
+    ]);
+  });
+
+  it("re-running the seed does not disable a rule an administrator enabled", async () => {
+    await t.db.exec(SEED);
+    expect(
+      (
+        await q(
+          "select count(*)::int n from public.panchangam_pooja_rules where active",
+        )
+      ).rows[0].n,
+    ).toBe(1);
+  });
+});

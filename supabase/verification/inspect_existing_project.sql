@@ -87,3 +87,19 @@ select relname from pg_class
    and relname in ('admin_users','poojas','recurring_pooja_schedule','panchangam_pooja_rules',
                    'special_pooja_schedule','bookings','booking_audit_log','pooja_price_audit_log',
                    'schedule_audit_log','festival_offerings');
+
+-- 15. Function-name clashes. IMPORTANT: the migrations use CREATE OR REPLACE for these, which would
+--     silently REPLACE an existing function of the same name and signature.   expect: 0 rows
+select p.oid::regprocedure as existing_function
+  from pg_proc p
+ where p.pronamespace = 'public'::regnamespace
+   and p.proname in ('set_updated_at','is_admin','_require_admin','_set_audit_context','generate_order_no',
+                     'forbid_audit_change','stamp_payment_verification','protect_booking_snapshot',
+                     'log_pooja_price_change','log_schedule_change','enforce_festival_booking',
+                     'sync_festival_to_pooja','admin_booking_action','admin_set_pooja_price',
+                     'admin_special_schedule_create','admin_special_schedule_update',
+                     'admin_schedule_rule_set_active','admin_festival_create','admin_festival_update');
+
+-- 16. Who uses an existing set_updated_at() (if query 15 shows one): replacing it affects these triggers.
+select event_object_table, trigger_name, action_statement from information_schema.triggers
+ where trigger_schema = 'public' and action_statement ilike '%set_updated_at%';
