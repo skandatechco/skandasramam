@@ -1,6 +1,6 @@
 {
   "installCommand": "pnpm config set require-scripts-approval false && pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm run build:client",
+  "buildCommand": "pnpm run build:client && pnpm run build:api",
   "outputDirectory": "dist/spa",
   "headers": [
     {

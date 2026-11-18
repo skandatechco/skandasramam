@@ -72,3 +72,20 @@ describe("authenticated API responses", () => {
     expect(r.headers.get("cache-control")).toBe("private, no-store");
   });
 });
+
+describe("Vercel function entry (regression: ERR_UNSUPPORTED_DIR_IMPORT)", () => {
+  const entry = readFileSync(new URL("api/index.ts", root), "utf8");
+
+  it("imports only the pre-bundled ESM file, never extensionless TS sources", () => {
+    const rel = [...entry.matchAll(/from\s+"(\.{1,2}\/[^"]*)"/g)].map(
+      (m) => m[1],
+    );
+    expect(rel).toEqual(["./_server.mjs"]);
+  });
+
+  it("builds that bundle in the Vercel build command", () => {
+    expect(vercel.buildCommand).toMatch(/build:api/);
+    const pkg = JSON.parse(readFileSync(new URL("package.json", root), "utf8"));
+    expect(pkg.scripts["build:api"]).toMatch(/vite\.config\.api\.ts/);
+  });
+});
