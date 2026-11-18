@@ -265,7 +265,7 @@ describe("authentication", () => {
     const r = await call("GET", "/me");
     expect(r.status).toBe(200);
     expect(await r.json()).toEqual({ ok: true, admin: ADMIN });
-    expect(r.headers.get("cache-control")).toBe("no-store");
+    expect(r.headers.get("cache-control")).toBe("private, no-store");
   });
 });
 

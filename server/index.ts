@@ -118,10 +118,14 @@ function deriveRegularEventsFromPanchang(en: any) {
   );
 }
 
+const PRIVATE_NO_STORE = "private, no-store";
+
 export function createServer(opts: { rateLimiting?: boolean } = {}) {
   const app = express();
   // Behind Vercel's proxy: use the real client IP (for rate limiting).
   app.set("trust proxy", 1);
+  // No automatic ETags: authenticated JSON must never be revalidated into a 304.
+  app.set("etag", false);
 
   // Middleware
   app.use(cors());
@@ -147,7 +151,8 @@ export function createServer(opts: { rateLimiting?: boolean } = {}) {
     : passthrough;
   // Booking responses are per-devotee and must never be cached by browsers/CDNs.
   app.use("/api/bookings", (_req, res, next) => {
-    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("Cache-Control", PRIVATE_NO_STORE);
+    res.vary("Authorization");
     next();
   });
   // ---- Administration API ----------------------------------------------------
@@ -158,7 +163,8 @@ export function createServer(opts: { rateLimiting?: boolean } = {}) {
     : passthrough;
   const adminApi = express.Router();
   adminApi.use((_req, res, next) => {
-    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("Cache-Control", PRIVATE_NO_STORE);
+    res.vary("Authorization");
     next();
   });
   adminApi.use(adminLimiter, requireAdmin);
@@ -370,6 +376,12 @@ export function createServer(opts: { rateLimiting?: boolean } = {}) {
         error: e?.message || "Failed to compute next nakshatra",
       });
     }
+  });
+
+  // Unknown /api paths answer JSON 404 (never the SPA shell, never cached).
+  app.use("/api", (_req, res) => {
+    res.setHeader("Cache-Control", PRIVATE_NO_STORE);
+    res.status(404).json({ ok: false, code: "NOT_FOUND", error: "Not found." });
   });
 
   // Last-resort error handler: log the message server-side only (no request

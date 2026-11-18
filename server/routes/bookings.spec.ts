@@ -146,7 +146,7 @@ describe("POST /api/bookings", () => {
       sankalpam: "For family wellbeing",
     });
     expect(r.status).toBe(201);
-    expect(r.headers.get("cache-control")).toBe("no-store");
+    expect(r.headers.get("cache-control")).toBe("private, no-store");
     const body = await r.json();
     expect(body.booking).toEqual({
       orderNo: ORDER,
