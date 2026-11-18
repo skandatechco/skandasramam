@@ -1,0 +1,2 @@
+# Keep SQL byte-identical across platforms (the execution-pack drift test compares bytes).
+supabase/** text eol=lf
